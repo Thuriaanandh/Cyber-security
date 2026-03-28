@@ -1,0 +1,2257 @@
+======================================================================
+  FORENSIC EXFILTRATION DETECTION — SUSPICIOUS FLOW LOG
+  Generated: 2026-03-09T16:37:28.261241+00:00
+  Total flows analysed : 260
+  Flagged flows        : 125
+======================================================================
+
+[0001] ──────────────────────────────────────────
+  Src        : 192.168.123.73:65044
+  Dst        : 216.136.28.38:443
+  Protocol   : TCP
+  Start time : 1704703027.4022517
+  Duration   : 2260.77 s
+  Packets    : 42687
+  Bytes      : 32,673,153
+  Byte rate  : 14452.2 B/s
+  Entropy    : 7.9798 bits/byte
+  Burstiness : 1.1462
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.479513
+
+[0002] ──────────────────────────────────────────
+  Src        : 192.168.67.156:55047
+  Dst        : 161.195.147.170:9001
+  Protocol   : TCP
+  Start time : 1701242667.0460362
+  Duration   : 512.66 s
+  Packets    : 1124
+  Bytes      : 4,430,302
+  Byte rate  : 8641.8 B/s
+  Entropy    : 7.9637 bits/byte
+  Burstiness : 1.3093
+  Heuristic score  : 95
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.414998
+
+[0003] ──────────────────────────────────────────
+  Src        : 192.168.153.92:50954
+  Dst        : 62.152.148.111:443
+  Protocol   : TCP
+  Start time : 1702765433.5091186
+  Duration   : 3395.78 s
+  Packets    : 13300
+  Bytes      : 23,454,137
+  Byte rate  : 6906.8 B/s
+  Entropy    : 7.9814 bits/byte
+  Burstiness : 0.9306
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.440733
+
+[0004] ──────────────────────────────────────────
+  Src        : 192.168.91.12:61642
+  Dst        : 202.138.8.63:31337
+  Protocol   : TCP
+  Start time : 1706439734.9473634
+  Duration   : 34.68 s
+  Packets    : 1852
+  Bytes      : 1,373,095
+  Byte rate  : 39598.6 B/s
+  Entropy    : 7.9558 bits/byte
+  Burstiness : 2.4685
+  Heuristic score  : 90
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.519220
+
+[0005] ──────────────────────────────────────────
+  Src        : 192.168.224.222:49490
+  Dst        : 115.217.250.103:443
+  Protocol   : TCP
+  Start time : 1704857091.1141102
+  Duration   : 16958.94 s
+  Packets    : 583
+  Bytes      : 914,069
+  Byte rate  : 53.9 B/s
+  Entropy    : 7.9122 bits/byte
+  Burstiness : 1.7577
+  Heuristic score  : 80
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, very_long_duration, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.485264
+
+[0006] ──────────────────────────────────────────
+  Src        : 192.168.133.151:56517
+  Dst        : 163.202.190.240:53
+  Protocol   : UDP
+  Start time : 1707809150.7921107
+  Duration   : 20.34 s
+  Packets    : 12
+  Bytes      : 3,731
+  Byte rate  : 183.4 B/s
+  Entropy    : 7.9486 bits/byte
+  Burstiness : 3.9726
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.483772
+
+[0007] ──────────────────────────────────────────
+  Src        : 192.168.1.12:62543
+  Dst        : 224.171.152.88:53
+  Protocol   : UDP
+  Start time : 1704060008.7489114
+  Duration   : 22.10 s
+  Packets    : 47
+  Bytes      : 3,257
+  Byte rate  : 147.4 B/s
+  Entropy    : 7.9421 bits/byte
+  Burstiness : 3.1380
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.453022
+
+[0008] ──────────────────────────────────────────
+  Src        : 192.168.168.93:50469
+  Dst        : 28.245.87.83:4444
+  Protocol   : TCP
+  Start time : 1705494985.241428
+  Duration   : 538.85 s
+  Packets    : 3211
+  Bytes      : 4,202,891
+  Byte rate  : 7799.8 B/s
+  Entropy    : 7.9664 bits/byte
+  Burstiness : 1.1588
+  Heuristic score  : 95
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.406511
+
+[0009] ──────────────────────────────────────────
+  Src        : 192.168.196.155:50936
+  Dst        : 132.12.76.79:443
+  Protocol   : TCP
+  Start time : 1704327569.6059084
+  Duration   : 3342.96 s
+  Packets    : 23583
+  Bytes      : 25,350,988
+  Byte rate  : 7583.4 B/s
+  Entropy    : 7.9825 bits/byte
+  Burstiness : 0.7985
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.452270
+
+[0010] ──────────────────────────────────────────
+  Src        : 192.168.193.62:49835
+  Dst        : 236.123.251.114:443
+  Protocol   : TCP
+  Start time : 1700828542.2296364
+  Duration   : 2524.79 s
+  Packets    : 8436
+  Bytes      : 3,231,235
+  Byte rate  : 1279.8 B/s
+  Entropy    : 7.9841 bits/byte
+  Burstiness : 1.0408
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.410769
+
+[0011] ──────────────────────────────────────────
+  Src        : 192.168.97.12:56253
+  Dst        : 199.118.67.115:443
+  Protocol   : TCP
+  Start time : 1702169937.7792983
+  Duration   : 1778.31 s
+  Packets    : 26493
+  Bytes      : 20,034,184
+  Byte rate  : 11265.8 B/s
+  Entropy    : 7.9828 bits/byte
+  Burstiness : 0.3066
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.436424
+
+[0012] ──────────────────────────────────────────
+  Src        : 192.168.169.42:59676
+  Dst        : 158.18.57.194:443
+  Protocol   : TCP
+  Start time : 1708639681.0546832
+  Duration   : 42028.36 s
+  Packets    : 1075
+  Bytes      : 132,365
+  Byte rate  : 3.1 B/s
+  Entropy    : 7.8884 bits/byte
+  Burstiness : 2.2455
+  Heuristic score  : 85
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, very_long_duration, high_burstiness, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 0.9950
+  IF anomaly score : -0.488094
+
+[0013] ──────────────────────────────────────────
+  Src        : 192.168.247.150:65374
+  Dst        : 139.224.188.73:31337
+  Protocol   : TCP
+  Start time : 1705115067.4983435
+  Duration   : 253.07 s
+  Packets    : 3899
+  Bytes      : 338,602
+  Byte rate  : 1338.0 B/s
+  Entropy    : 7.9572 bits/byte
+  Burstiness : 2.2831
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.501082
+
+[0014] ──────────────────────────────────────────
+  Src        : 192.168.214.171:51387
+  Dst        : 72.242.97.203:443
+  Protocol   : TCP
+  Start time : 1705448988.1407285
+  Duration   : 1918.00 s
+  Packets    : 33104
+  Bytes      : 19,728,419
+  Byte rate  : 10285.9 B/s
+  Entropy    : 7.9803 bits/byte
+  Burstiness : 0.6816
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.438058
+
+[0015] ──────────────────────────────────────────
+  Src        : 192.168.199.228:60589
+  Dst        : 72.196.27.202:53
+  Protocol   : UDP
+  Start time : 1708462707.7918832
+  Duration   : 23.73 s
+  Packets    : 36
+  Bytes      : 1,691
+  Byte rate  : 71.3 B/s
+  Entropy    : 7.8852 bits/byte
+  Burstiness : 2.7037
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 0.9950
+  IF anomaly score : -0.457875
+
+[0016] ──────────────────────────────────────────
+  Src        : 192.168.16.207:58758
+  Dst        : 95.190.31.169:53
+  Protocol   : UDP
+  Start time : 1702757620.7549508
+  Duration   : 10.67 s
+  Packets    : 59
+  Bytes      : 7,601
+  Byte rate  : 712.1 B/s
+  Entropy    : 7.9755 bits/byte
+  Burstiness : 1.9024
+  Heuristic score  : 60
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.469509
+
+[0017] ──────────────────────────────────────────
+  Src        : 192.168.67.229:58539
+  Dst        : 18.236.139.29:6667
+  Protocol   : TCP
+  Start time : 1704450325.060373
+  Duration   : 323.12 s
+  Packets    : 406
+  Bytes      : 3,736,853
+  Byte rate  : 11564.9 B/s
+  Entropy    : 7.9627 bits/byte
+  Burstiness : 1.3626
+  Heuristic score  : 95
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 0.9600
+  IF anomaly score : -0.440211
+
+[0018] ──────────────────────────────────────────
+  Src        : 192.168.36.238:64985
+  Dst        : 217.163.106.33:8443
+  Protocol   : TCP
+  Start time : 1704927998.2160246
+  Duration   : 512.97 s
+  Packets    : 945
+  Bytes      : 3,170,762
+  Byte rate  : 6181.2 B/s
+  Entropy    : 7.9642 bits/byte
+  Burstiness : 1.4536
+  Heuristic score  : 95
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.418684
+
+[0019] ──────────────────────────────────────────
+  Src        : 192.168.115.37:49390
+  Dst        : 217.197.205.51:5432
+  Protocol   : TCP
+  Start time : 1700516579.170144
+  Duration   : 3.49 s
+  Packets    : 341
+  Bytes      : 133,203
+  Byte rate  : 38170.9 B/s
+  Entropy    : 3.8429 bits/byte
+  Burstiness : 0.1076
+  Heuristic score  : 0
+  Heuristic label  : Benign
+  Triggered rules  : none
+  ML label         : Suspicious
+  RF confidence    : 0.9900
+  IF anomaly score : -0.483042
+
+[0020] ──────────────────────────────────────────
+  Src        : 192.168.235.104:62449
+  Dst        : 193.20.182.116:443
+  Protocol   : TCP
+  Start time : 1709459329.3158286
+  Duration   : 611.82 s
+  Packets    : 7850
+  Bytes      : 46,472,746
+  Byte rate  : 75958.5 B/s
+  Entropy    : 7.9798 bits/byte
+  Burstiness : 0.8348
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.501443
+
+[0021] ──────────────────────────────────────────
+  Src        : 192.168.190.97:49777
+  Dst        : 186.165.84.221:8443
+  Protocol   : TCP
+  Start time : 1703766459.9989138
+  Duration   : 695.86 s
+  Packets    : 456
+  Bytes      : 3,629,667
+  Byte rate  : 5216.1 B/s
+  Entropy    : 7.9620 bits/byte
+  Burstiness : 2.5849
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 0.9800
+  IF anomaly score : -0.497032
+
+[0022] ──────────────────────────────────────────
+  Src        : 192.168.24.78:50017
+  Dst        : 136.71.18.130:5432
+  Protocol   : TCP
+  Start time : 1706522576.0646586
+  Duration   : 105.49 s
+  Packets    : 73
+  Bytes      : 53,628
+  Byte rate  : 508.4 B/s
+  Entropy    : 3.5373 bits/byte
+  Burstiness : 1.1845
+  Heuristic score  : 0
+  Heuristic label  : Benign
+  Triggered rules  : none
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.460999
+
+[0023] ──────────────────────────────────────────
+  Src        : 192.168.218.97:58547
+  Dst        : 212.196.203.204:53
+  Protocol   : UDP
+  Start time : 1700509440.8900301
+  Duration   : 8.44 s
+  Packets    : 49
+  Bytes      : 4,863
+  Byte rate  : 576.2 B/s
+  Entropy    : 7.9661 bits/byte
+  Burstiness : 2.5053
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 0.9900
+  IF anomaly score : -0.455445
+
+[0024] ──────────────────────────────────────────
+  Src        : 192.168.172.9:54647
+  Dst        : 67.157.122.73:53
+  Protocol   : UDP
+  Start time : 1702561162.6771462
+  Duration   : 20.48 s
+  Packets    : 28
+  Bytes      : 3,709
+  Byte rate  : 181.1 B/s
+  Entropy    : 7.9437 bits/byte
+  Burstiness : 2.3487
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.454204
+
+[0025] ──────────────────────────────────────────
+  Src        : 192.168.141.213:56018
+  Dst        : 27.184.36.190:587
+  Protocol   : TCP
+  Start time : 1704673816.015553
+  Duration   : 2.99 s
+  Packets    : 462
+  Bytes      : 192,064
+  Byte rate  : 64173.4 B/s
+  Entropy    : 5.2189 bits/byte
+  Burstiness : 1.4062
+  Heuristic score  : 0
+  Heuristic label  : Benign
+  Triggered rules  : none
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.485234
+
+[0026] ──────────────────────────────────────────
+  Src        : 192.168.170.168:59810
+  Dst        : 163.59.153.8:6667
+  Protocol   : TCP
+  Start time : 1703203059.8529096
+  Duration   : 320.15 s
+  Packets    : 4098
+  Bytes      : 3,544,901
+  Byte rate  : 11072.7 B/s
+  Entropy    : 7.9636 bits/byte
+  Burstiness : 1.5979
+  Heuristic score  : 95
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.401494
+
+[0027] ──────────────────────────────────────────
+  Src        : 192.168.52.12:61501
+  Dst        : 124.101.46.6:53
+  Protocol   : UDP
+  Start time : 1707206064.5696387
+  Duration   : 19.54 s
+  Packets    : 10
+  Bytes      : 6,016
+  Byte rate  : 307.9 B/s
+  Entropy    : 7.9671 bits/byte
+  Burstiness : 1.7731
+  Heuristic score  : 60
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.487558
+
+[0028] ──────────────────────────────────────────
+  Src        : 192.168.135.162:57168
+  Dst        : 235.47.160.191:443
+  Protocol   : TCP
+  Start time : 1701615581.3026798
+  Duration   : 517.33 s
+  Packets    : 25615
+  Bytes      : 6,708,177
+  Byte rate  : 12966.9 B/s
+  Entropy    : 7.9825 bits/byte
+  Burstiness : 0.3504
+  Heuristic score  : 95
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.455312
+
+[0029] ──────────────────────────────────────────
+  Src        : 192.168.168.79:57000
+  Dst        : 202.121.2.229:443
+  Protocol   : TCP
+  Start time : 1700632034.85799
+  Duration   : 62721.13 s
+  Packets    : 1981
+  Bytes      : 882,496
+  Byte rate  : 14.1 B/s
+  Entropy    : 7.9086 bits/byte
+  Burstiness : 3.6556
+  Heuristic score  : 85
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, very_long_duration, high_burstiness, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.500798
+
+[0030] ──────────────────────────────────────────
+  Src        : 192.168.96.119:62905
+  Dst        : 36.94.120.182:31337
+  Protocol   : TCP
+  Start time : 1709812021.5811152
+  Duration   : 809.34 s
+  Packets    : 139
+  Bytes      : 1,818,114
+  Byte rate  : 2246.4 B/s
+  Entropy    : 7.9592 bits/byte
+  Burstiness : 0.8078
+  Heuristic score  : 95
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 0.8050
+  IF anomaly score : -0.553819
+
+[0031] ──────────────────────────────────────────
+  Src        : 192.168.145.94:55846
+  Dst        : 173.129.107.82:443
+  Protocol   : TCP
+  Start time : 1708190881.651328
+  Duration   : 3095.76 s
+  Packets    : 9801
+  Bytes      : 25,096,586
+  Byte rate  : 8106.8 B/s
+  Entropy    : 7.9824 bits/byte
+  Burstiness : 1.0605
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.448125
+
+[0032] ──────────────────────────────────────────
+  Src        : 192.168.118.235:55073
+  Dst        : 66.149.16.17:8443
+  Protocol   : TCP
+  Start time : 1703479388.339722
+  Duration   : 255.78 s
+  Packets    : 1695
+  Bytes      : 1,724,216
+  Byte rate  : 6741.0 B/s
+  Entropy    : 7.9660 bits/byte
+  Burstiness : 2.2444
+  Heuristic score  : 90
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.405046
+
+[0033] ──────────────────────────────────────────
+  Src        : 192.168.180.173:49842
+  Dst        : 80.187.71.72:443
+  Protocol   : TCP
+  Start time : 1701904501.3645146
+  Duration   : 79221.20 s
+  Packets    : 915
+  Bytes      : 859,923
+  Byte rate  : 10.9 B/s
+  Entropy    : 7.9026 bits/byte
+  Burstiness : 3.7056
+  Heuristic score  : 85
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, very_long_duration, high_burstiness, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.541199
+
+[0034] ──────────────────────────────────────────
+  Src        : 192.168.194.198:60122
+  Dst        : 104.71.36.87:53
+  Protocol   : UDP
+  Start time : 1705503097.7580729
+  Duration   : 26.98 s
+  Packets    : 10
+  Bytes      : 4,389
+  Byte rate  : 162.7 B/s
+  Entropy    : 7.9642 bits/byte
+  Burstiness : 3.9517
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.493771
+
+[0035] ──────────────────────────────────────────
+  Src        : 192.168.249.164:62556
+  Dst        : 167.222.177.37:443
+  Protocol   : TCP
+  Start time : 1700357329.5240226
+  Duration   : 2566.94 s
+  Packets    : 49565
+  Bytes      : 48,295,874
+  Byte rate  : 18814.6 B/s
+  Entropy    : 7.9817 bits/byte
+  Burstiness : 0.9954
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.515400
+
+[0036] ──────────────────────────────────────────
+  Src        : 192.168.44.246:64985
+  Dst        : 251.37.56.63:53
+  Protocol   : UDP
+  Start time : 1707854405.6062768
+  Duration   : 10.30 s
+  Packets    : 35
+  Bytes      : 7,046
+  Byte rate  : 684.0 B/s
+  Entropy    : 7.9759 bits/byte
+  Burstiness : 1.6934
+  Heuristic score  : 60
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.493571
+
+[0037] ──────────────────────────────────────────
+  Src        : 192.168.178.219:49205
+  Dst        : 218.202.128.26:587
+  Protocol   : TCP
+  Start time : 1703771446.803557
+  Duration   : 12.56 s
+  Packets    : 474
+  Bytes      : 148,394
+  Byte rate  : 11812.2 B/s
+  Entropy    : 6.1639 bits/byte
+  Burstiness : 1.4709
+  Heuristic score  : 0
+  Heuristic label  : Benign
+  Triggered rules  : none
+  ML label         : Suspicious
+  RF confidence    : 0.9700
+  IF anomaly score : -0.454424
+
+[0038] ──────────────────────────────────────────
+  Src        : 192.168.189.118:63699
+  Dst        : 67.108.171.52:443
+  Protocol   : TCP
+  Start time : 1701226117.1400654
+  Duration   : 84885.18 s
+  Packets    : 218
+  Bytes      : 1,816,932
+  Byte rate  : 21.4 B/s
+  Entropy    : 7.9259 bits/byte
+  Burstiness : 1.3096
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, very_long_duration, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 0.9800
+  IF anomaly score : -0.622021
+
+[0039] ──────────────────────────────────────────
+  Src        : 192.168.132.7:50796
+  Dst        : 4.242.135.120:443
+  Protocol   : TCP
+  Start time : 1708760258.3604841
+  Duration   : 3168.59 s
+  Packets    : 42286
+  Bytes      : 23,622,444
+  Byte rate  : 7455.2 B/s
+  Entropy    : 7.9814 bits/byte
+  Burstiness : 0.8042
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.454785
+
+[0040] ──────────────────────────────────────────
+  Src        : 192.168.109.25:57354
+  Dst        : 176.21.148.94:443
+  Protocol   : TCP
+  Start time : 1701612498.0742571
+  Duration   : 30993.54 s
+  Packets    : 620
+  Bytes      : 1,884,873
+  Byte rate  : 60.8 B/s
+  Entropy    : 7.9104 bits/byte
+  Burstiness : 2.5412
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, very_long_duration, high_burstiness, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.499634
+
+[0041] ──────────────────────────────────────────
+  Src        : 192.168.60.1:59999
+  Dst        : 150.248.10.105:53
+  Protocol   : UDP
+  Start time : 1700999778.7865596
+  Duration   : 12.76 s
+  Packets    : 35
+  Bytes      : 7,385
+  Byte rate  : 578.8 B/s
+  Entropy    : 7.9689 bits/byte
+  Burstiness : 2.2550
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.455492
+
+[0042] ──────────────────────────────────────────
+  Src        : 192.168.194.127:57662
+  Dst        : 143.54.34.201:443
+  Protocol   : TCP
+  Start time : 1707327800.3921833
+  Duration   : 2820.34 s
+  Packets    : 41751
+  Bytes      : 39,119,796
+  Byte rate  : 13870.6 B/s
+  Entropy    : 7.9805 bits/byte
+  Burstiness : 0.8484
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.456649
+
+[0043] ──────────────────────────────────────────
+  Src        : 192.168.138.20:61237
+  Dst        : 38.195.98.201:53
+  Protocol   : UDP
+  Start time : 1700107000.0801952
+  Duration   : 27.18 s
+  Packets    : 51
+  Bytes      : 3,678
+  Byte rate  : 135.3 B/s
+  Entropy    : 7.9486 bits/byte
+  Burstiness : 1.8335
+  Heuristic score  : 60
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.462855
+
+[0044] ──────────────────────────────────────────
+  Src        : 192.168.230.207:55653
+  Dst        : 146.252.195.194:443
+  Protocol   : TCP
+  Start time : 1705501855.3986607
+  Duration   : 1157.47 s
+  Packets    : 26700
+  Bytes      : 42,891,967
+  Byte rate  : 37056.7 B/s
+  Entropy    : 7.9798 bits/byte
+  Burstiness : 0.4383
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.490128
+
+[0045] ──────────────────────────────────────────
+  Src        : 192.168.172.130:55625
+  Dst        : 147.215.206.23:53
+  Protocol   : UDP
+  Start time : 1700141087.5928452
+  Duration   : 8.48 s
+  Packets    : 13
+  Bytes      : 6,885
+  Byte rate  : 811.9 B/s
+  Entropy    : 7.9715 bits/byte
+  Burstiness : 2.8124
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.475516
+
+[0046] ──────────────────────────────────────────
+  Src        : 192.168.221.130:64637
+  Dst        : 102.193.18.167:8443
+  Protocol   : TCP
+  Start time : 1705572788.4006863
+  Duration   : 122.67 s
+  Packets    : 4375
+  Bytes      : 1,444,920
+  Byte rate  : 11778.5 B/s
+  Entropy    : 7.9603 bits/byte
+  Burstiness : 2.6705
+  Heuristic score  : 90
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.441368
+
+[0047] ──────────────────────────────────────────
+  Src        : 192.168.159.112:61971
+  Dst        : 25.249.247.23:8443
+  Protocol   : TCP
+  Start time : 1701389312.6008487
+  Duration   : 391.53 s
+  Packets    : 4455
+  Bytes      : 4,933,882
+  Byte rate  : 12601.4 B/s
+  Entropy    : 7.9674 bits/byte
+  Burstiness : 2.1842
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.415003
+
+[0048] ──────────────────────────────────────────
+  Src        : 192.168.254.75:54330
+  Dst        : 98.202.31.83:53
+  Protocol   : UDP
+  Start time : 1706822062.9542048
+  Duration   : 10.31 s
+  Packets    : 23
+  Bytes      : 4,875
+  Byte rate  : 472.7 B/s
+  Entropy    : 7.9605 bits/byte
+  Burstiness : 3.5717
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.452433
+
+[0049] ──────────────────────────────────────────
+  Src        : 192.168.97.209:60140
+  Dst        : 174.82.225.35:53
+  Protocol   : UDP
+  Start time : 1704170449.3258507
+  Duration   : 9.30 s
+  Packets    : 46
+  Bytes      : 3,284
+  Byte rate  : 353.0 B/s
+  Entropy    : 7.9516 bits/byte
+  Burstiness : 1.6404
+  Heuristic score  : 60
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.475643
+
+[0050] ──────────────────────────────────────────
+  Src        : 192.168.120.158:62804
+  Dst        : 152.219.115.14:443
+  Protocol   : TCP
+  Start time : 1703794937.2919676
+  Duration   : 57005.37 s
+  Packets    : 1151
+  Bytes      : 686,005
+  Byte rate  : 12.0 B/s
+  Entropy    : 7.8999 bits/byte
+  Burstiness : 3.3798
+  Heuristic score  : 85
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, very_long_duration, high_burstiness, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.522648
+
+[0051] ──────────────────────────────────────────
+  Src        : 192.168.134.82:58789
+  Dst        : 40.65.130.71:443
+  Protocol   : TCP
+  Start time : 1700317252.0516493
+  Duration   : 2262.42 s
+  Packets    : 16819
+  Bytes      : 8,722,302
+  Byte rate  : 3855.3 B/s
+  Entropy    : 7.9807 bits/byte
+  Burstiness : 0.5584
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.421122
+
+[0052] ──────────────────────────────────────────
+  Src        : 192.168.63.186:62537
+  Dst        : 81.173.3.183:443
+  Protocol   : TCP
+  Start time : 1703281798.959575
+  Duration   : 881.70 s
+  Packets    : 8704
+  Bytes      : 35,055,530
+  Byte rate  : 39759.0 B/s
+  Entropy    : 7.9825 bits/byte
+  Burstiness : 0.8169
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.473726
+
+[0053] ──────────────────────────────────────────
+  Src        : 192.168.130.127:62683
+  Dst        : 102.236.190.231:9001
+  Protocol   : TCP
+  Start time : 1707059720.9581661
+  Duration   : 507.57 s
+  Packets    : 3808
+  Bytes      : 1,037,544
+  Byte rate  : 2044.2 B/s
+  Entropy    : 7.9636 bits/byte
+  Burstiness : 2.2319
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.409525
+
+[0054] ──────────────────────────────────────────
+  Src        : 192.168.215.219:56137
+  Dst        : 26.6.244.64:53
+  Protocol   : UDP
+  Start time : 1705544498.8199654
+  Duration   : 10.57 s
+  Packets    : 43
+  Bytes      : 7,403
+  Byte rate  : 700.4 B/s
+  Entropy    : 7.9770 bits/byte
+  Burstiness : 2.7843
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.456297
+
+[0055] ──────────────────────────────────────────
+  Src        : 192.168.204.97:65116
+  Dst        : 89.58.5.134:443
+  Protocol   : TCP
+  Start time : 1700910202.2060268
+  Duration   : 11603.13 s
+  Packets    : 1596
+  Bytes      : 1,236,096
+  Byte rate  : 106.5 B/s
+  Entropy    : 7.9152 bits/byte
+  Burstiness : 4.7246
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, very_long_duration, high_burstiness, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 0.9550
+  IF anomaly score : -0.520364
+
+[0056] ──────────────────────────────────────────
+  Src        : 192.168.127.97:61817
+  Dst        : 245.139.47.161:53
+  Protocol   : UDP
+  Start time : 1707537062.094507
+  Duration   : 8.40 s
+  Packets    : 38
+  Bytes      : 7,976
+  Byte rate  : 949.2 B/s
+  Entropy    : 7.9748 bits/byte
+  Burstiness : 3.1317
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.472974
+
+[0057] ──────────────────────────────────────────
+  Src        : 192.168.215.71:50449
+  Dst        : 46.189.61.185:443
+  Protocol   : TCP
+  Start time : 1700845769.1153862
+  Duration   : 59432.13 s
+  Packets    : 352
+  Bytes      : 1,077,654
+  Byte rate  : 18.1 B/s
+  Entropy    : 7.9042 bits/byte
+  Burstiness : 3.0859
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, very_long_duration, high_burstiness, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.565437
+
+[0058] ──────────────────────────────────────────
+  Src        : 192.168.86.243:51330
+  Dst        : 243.232.141.84:443
+  Protocol   : TCP
+  Start time : 1705227017.8506463
+  Duration   : 52859.83 s
+  Packets    : 256
+  Bytes      : 935,651
+  Byte rate  : 17.7 B/s
+  Entropy    : 7.9137 bits/byte
+  Burstiness : 1.1440
+  Heuristic score  : 80
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, very_long_duration, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 0.9950
+  IF anomaly score : -0.585312
+
+[0059] ──────────────────────────────────────────
+  Src        : 192.168.0.59:60139
+  Dst        : 75.96.248.244:443
+  Protocol   : TCP
+  Start time : 1704872711.7073731
+  Duration   : 1986.76 s
+  Packets    : 8250
+  Bytes      : 39,427,657
+  Byte rate  : 19845.2 B/s
+  Entropy    : 7.9833 bits/byte
+  Burstiness : 1.1083
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.460145
+
+[0060] ──────────────────────────────────────────
+  Src        : 192.168.86.135:61917
+  Dst        : 216.12.112.105:4444
+  Protocol   : TCP
+  Start time : 1709556489.3320115
+  Duration   : 630.30 s
+  Packets    : 1923
+  Bytes      : 699,484
+  Byte rate  : 1109.8 B/s
+  Entropy    : 7.9578 bits/byte
+  Burstiness : 2.3673
+  Heuristic score  : 75
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, long_duration, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 0.9950
+  IF anomaly score : -0.401992
+
+[0061] ──────────────────────────────────────────
+  Src        : 192.168.209.222:61829
+  Dst        : 194.190.199.168:443
+  Protocol   : TCP
+  Start time : 1704796957.3037431
+  Duration   : 12483.97 s
+  Packets    : 1281
+  Bytes      : 1,339,492
+  Byte rate  : 107.3 B/s
+  Entropy    : 7.9098 bits/byte
+  Burstiness : 3.9021
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, very_long_duration, high_burstiness, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 0.9750
+  IF anomaly score : -0.493666
+
+[0062] ──────────────────────────────────────────
+  Src        : 192.168.213.173:62018
+  Dst        : 96.49.25.180:443
+  Protocol   : TCP
+  Start time : 1707521906.6578505
+  Duration   : 1830.47 s
+  Packets    : 18931
+  Bytes      : 37,424,642
+  Byte rate  : 20445.4 B/s
+  Entropy    : 7.9822 bits/byte
+  Burstiness : 0.7841
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.459098
+
+[0063] ──────────────────────────────────────────
+  Src        : 192.168.194.20:60967
+  Dst        : 21.9.49.233:53
+  Protocol   : UDP
+  Start time : 1706386903.8138645
+  Duration   : 6.70 s
+  Packets    : 37
+  Bytes      : 2,175
+  Byte rate  : 324.9 B/s
+  Entropy    : 7.8985 bits/byte
+  Burstiness : 2.9239
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 0.9950
+  IF anomaly score : -0.462154
+
+[0064] ──────────────────────────────────────────
+  Src        : 192.168.200.120:56670
+  Dst        : 179.71.198.141:3306
+  Protocol   : TCP
+  Start time : 1704710962.0614314
+  Duration   : 0.89 s
+  Packets    : 101
+  Bytes      : 166,580
+  Byte rate  : 186456.5 B/s
+  Entropy    : 5.3270 bits/byte
+  Burstiness : 0.2603
+  Heuristic score  : 0
+  Heuristic label  : Benign
+  Triggered rules  : none
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.521292
+
+[0065] ──────────────────────────────────────────
+  Src        : 192.168.199.99:53803
+  Dst        : 253.12.223.174:993
+  Protocol   : TCP
+  Start time : 1706501250.155588
+  Duration   : 110.21 s
+  Packets    : 152
+  Bytes      : 2,615
+  Byte rate  : 23.7 B/s
+  Entropy    : 3.3871 bits/byte
+  Burstiness : 1.4987
+  Heuristic score  : 0
+  Heuristic label  : Benign
+  Triggered rules  : none
+  ML label         : Suspicious
+  RF confidence    : 0.9600
+  IF anomaly score : -0.451909
+
+[0066] ──────────────────────────────────────────
+  Src        : 192.168.150.252:59146
+  Dst        : 1.243.217.134:53
+  Protocol   : UDP
+  Start time : 1707582995.4346364
+  Duration   : 12.26 s
+  Packets    : 38
+  Bytes      : 6,543
+  Byte rate  : 533.7 B/s
+  Entropy    : 7.9696 bits/byte
+  Burstiness : 3.2926
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.451582
+
+[0067] ──────────────────────────────────────────
+  Src        : 192.168.131.128:62912
+  Dst        : 38.165.95.199:443
+  Protocol   : TCP
+  Start time : 1702767132.4274588
+  Duration   : 296.95 s
+  Packets    : 19969
+  Bytes      : 1,184,414
+  Byte rate  : 3988.6 B/s
+  Entropy    : 7.9820 bits/byte
+  Burstiness : 1.1470
+  Heuristic score  : 85
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.462080
+
+[0068] ──────────────────────────────────────────
+  Src        : 192.168.220.213:49985
+  Dst        : 101.106.240.220:3306
+  Protocol   : TCP
+  Start time : 1708857051.7085836
+  Duration   : 41.80 s
+  Packets    : 29
+  Bytes      : 94,975
+  Byte rate  : 2272.1 B/s
+  Entropy    : 3.1081 bits/byte
+  Burstiness : 1.3133
+  Heuristic score  : 0
+  Heuristic label  : Benign
+  Triggered rules  : none
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.467634
+
+[0069] ──────────────────────────────────────────
+  Src        : 192.168.79.215:56332
+  Dst        : 196.85.214.71:8443
+  Protocol   : TCP
+  Start time : 1708503559.085995
+  Duration   : 140.47 s
+  Packets    : 2098
+  Bytes      : 3,229,449
+  Byte rate  : 22991.0 B/s
+  Entropy    : 7.9639 bits/byte
+  Burstiness : 2.1831
+  Heuristic score  : 90
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.412219
+
+[0070] ──────────────────────────────────────────
+  Src        : 192.168.60.47:61237
+  Dst        : 116.164.51.77:443
+  Protocol   : TCP
+  Start time : 1704384381.773188
+  Duration   : 2600.62 s
+  Packets    : 29694
+  Bytes      : 28,971,724
+  Byte rate  : 11140.3 B/s
+  Entropy    : 7.9839 bits/byte
+  Burstiness : 1.1644
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.452416
+
+[0071] ──────────────────────────────────────────
+  Src        : 192.168.8.17:55903
+  Dst        : 7.200.76.113:443
+  Protocol   : TCP
+  Start time : 1706896513.2016063
+  Duration   : 38736.16 s
+  Packets    : 301
+  Bytes      : 1,057,318
+  Byte rate  : 27.3 B/s
+  Entropy    : 7.9156 bits/byte
+  Burstiness : 1.0129
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, very_long_duration, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 0.9900
+  IF anomaly score : -0.525995
+
+[0072] ──────────────────────────────────────────
+  Src        : 192.168.137.120:62312
+  Dst        : 202.68.56.250:53
+  Protocol   : UDP
+  Start time : 1708091913.5507228
+  Duration   : 18.47 s
+  Packets    : 25
+  Bytes      : 3,966
+  Byte rate  : 214.8 B/s
+  Entropy    : 7.9535 bits/byte
+  Burstiness : 1.9457
+  Heuristic score  : 60
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.458515
+
+[0073] ──────────────────────────────────────────
+  Src        : 192.168.57.61:54859
+  Dst        : 19.196.35.73:53
+  Protocol   : UDP
+  Start time : 1705354455.2105887
+  Duration   : 1.40 s
+  Packets    : 33
+  Bytes      : 825
+  Byte rate  : 587.3 B/s
+  Entropy    : 7.7517 bits/byte
+  Burstiness : 1.6170
+  Heuristic score  : 60
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.523589
+
+[0074] ──────────────────────────────────────────
+  Src        : 192.168.28.18:51325
+  Dst        : 12.151.52.251:53
+  Protocol   : UDP
+  Start time : 1701297281.0690491
+  Duration   : 12.71 s
+  Packets    : 52
+  Bytes      : 3,621
+  Byte rate  : 284.8 B/s
+  Entropy    : 7.9489 bits/byte
+  Burstiness : 2.2888
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.462093
+
+[0075] ──────────────────────────────────────────
+  Src        : 192.168.76.34:57142
+  Dst        : 3.90.64.227:443
+  Protocol   : TCP
+  Start time : 1705929032.1641622
+  Duration   : 2616.61 s
+  Packets    : 48540
+  Bytes      : 14,678,378
+  Byte rate  : 5609.7 B/s
+  Entropy    : 7.9822 bits/byte
+  Burstiness : 0.8382
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.455616
+
+[0076] ──────────────────────────────────────────
+  Src        : 192.168.208.252:53729
+  Dst        : 211.137.251.105:443
+  Protocol   : TCP
+  Start time : 1709337006.8531094
+  Duration   : 1822.35 s
+  Packets    : 46804
+  Bytes      : 42,459,492
+  Byte rate  : 23299.4 B/s
+  Entropy    : 7.9797 bits/byte
+  Burstiness : 0.5510
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.488628
+
+[0077] ──────────────────────────────────────────
+  Src        : 192.168.244.86:58547
+  Dst        : 91.201.119.193:4444
+  Protocol   : TCP
+  Start time : 1702939345.2352426
+  Duration   : 229.18 s
+  Packets    : 4871
+  Bytes      : 2,525,575
+  Byte rate  : 11020.0 B/s
+  Entropy    : 7.9645 bits/byte
+  Burstiness : 1.7032
+  Heuristic score  : 85
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.393799
+
+[0078] ──────────────────────────────────────────
+  Src        : 192.168.93.159:51100
+  Dst        : 53.165.191.244:8080
+  Protocol   : TCP
+  Start time : 1703985066.2347422
+  Duration   : 55.77 s
+  Packets    : 375
+  Bytes      : 107,850
+  Byte rate  : 1933.9 B/s
+  Entropy    : 3.7672 bits/byte
+  Burstiness : 0.3455
+  Heuristic score  : 0
+  Heuristic label  : Benign
+  Triggered rules  : none
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.453804
+
+[0079] ──────────────────────────────────────────
+  Src        : 192.168.171.101:64642
+  Dst        : 48.81.212.21:443
+  Protocol   : TCP
+  Start time : 1707359768.4527497
+  Duration   : 441.27 s
+  Packets    : 38401
+  Bytes      : 12,389,870
+  Byte rate  : 28078.0 B/s
+  Entropy    : 7.9842 bits/byte
+  Burstiness : 0.9046
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.491658
+
+[0080] ──────────────────────────────────────────
+  Src        : 192.168.2.170:57174
+  Dst        : 9.27.201.148:53
+  Protocol   : UDP
+  Start time : 1701128815.5318038
+  Duration   : 3.51 s
+  Packets    : 33
+  Bytes      : 4,820
+  Byte rate  : 1373.1 B/s
+  Entropy    : 7.9575 bits/byte
+  Burstiness : 1.9133
+  Heuristic score  : 60
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.471217
+
+[0081] ──────────────────────────────────────────
+  Src        : 192.168.73.197:53203
+  Dst        : 135.61.214.206:443
+  Protocol   : TCP
+  Start time : 1700367351.0800848
+  Duration   : 2597.48 s
+  Packets    : 39243
+  Bytes      : 16,208,926
+  Byte rate  : 6240.3 B/s
+  Entropy    : 7.9812 bits/byte
+  Burstiness : 0.8556
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.451484
+
+[0082] ──────────────────────────────────────────
+  Src        : 192.168.232.143:51626
+  Dst        : 22.7.85.189:80
+  Protocol   : TCP
+  Start time : 1707866497.124936
+  Duration   : 4.63 s
+  Packets    : 489
+  Bytes      : 78,618
+  Byte rate  : 16963.1 B/s
+  Entropy    : 5.3815 bits/byte
+  Burstiness : 0.1077
+  Heuristic score  : 0
+  Heuristic label  : Benign
+  Triggered rules  : none
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.455118
+
+[0083] ──────────────────────────────────────────
+  Src        : 192.168.85.27:53589
+  Dst        : 177.249.92.62:443
+  Protocol   : TCP
+  Start time : 1701311237.9457006
+  Duration   : 44650.17 s
+  Packets    : 629
+  Bytes      : 204,620
+  Byte rate  : 4.6 B/s
+  Entropy    : 7.9110 bits/byte
+  Burstiness : 4.8900
+  Heuristic score  : 85
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, very_long_duration, high_burstiness, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 0.9950
+  IF anomaly score : -0.516320
+
+[0084] ──────────────────────────────────────────
+  Src        : 192.168.78.96:53260
+  Dst        : 241.1.220.229:1337
+  Protocol   : TCP
+  Start time : 1705433548.3947825
+  Duration   : 846.11 s
+  Packets    : 1677
+  Bytes      : 2,686,321
+  Byte rate  : 3174.9 B/s
+  Entropy    : 7.9635 bits/byte
+  Burstiness : 1.4142
+  Heuristic score  : 95
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.402403
+
+[0085] ──────────────────────────────────────────
+  Src        : 192.168.218.54:58209
+  Dst        : 3.106.126.4:443
+  Protocol   : TCP
+  Start time : 1707859703.3238964
+  Duration   : 68811.06 s
+  Packets    : 1608
+  Bytes      : 1,859,882
+  Byte rate  : 27.0 B/s
+  Entropy    : 7.8909 bits/byte
+  Burstiness : 3.4336
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, very_long_duration, high_burstiness, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 0.9950
+  IF anomaly score : -0.519501
+
+[0086] ──────────────────────────────────────────
+  Src        : 192.168.15.185:49941
+  Dst        : 215.251.8.122:53
+  Protocol   : UDP
+  Start time : 1702507014.2915354
+  Duration   : 22.58 s
+  Packets    : 34
+  Bytes      : 5,876
+  Byte rate  : 260.2 B/s
+  Entropy    : 7.9678 bits/byte
+  Burstiness : 2.1006
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.465291
+
+[0087] ──────────────────────────────────────────
+  Src        : 192.168.32.200:64254
+  Dst        : 160.126.100.39:3306
+  Protocol   : TCP
+  Start time : 1705996953.56716
+  Duration   : 55.00 s
+  Packets    : 32
+  Bytes      : 175,650
+  Byte rate  : 3193.8 B/s
+  Entropy    : 3.5331 bits/byte
+  Burstiness : 0.7455
+  Heuristic score  : 0
+  Heuristic label  : Benign
+  Triggered rules  : none
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.467309
+
+[0088] ──────────────────────────────────────────
+  Src        : 192.168.216.170:61801
+  Dst        : 203.245.235.31:8080
+  Protocol   : TCP
+  Start time : 1701249236.7930565
+  Duration   : 28.63 s
+  Packets    : 401
+  Bytes      : 196,013
+  Byte rate  : 6845.5 B/s
+  Entropy    : 3.2003 bits/byte
+  Burstiness : 0.1562
+  Heuristic score  : 0
+  Heuristic label  : Benign
+  Triggered rules  : none
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.463434
+
+[0089] ──────────────────────────────────────────
+  Src        : 192.168.206.122:61606
+  Dst        : 76.73.26.221:4444
+  Protocol   : TCP
+  Start time : 1703341547.5526664
+  Duration   : 730.61 s
+  Packets    : 137
+  Bytes      : 3,788,373
+  Byte rate  : 5185.2 B/s
+  Entropy    : 7.9627 bits/byte
+  Burstiness : 1.9611
+  Heuristic score  : 95
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 0.8200
+  IF anomaly score : -0.515821
+
+[0090] ──────────────────────────────────────────
+  Src        : 192.168.254.22:53761
+  Dst        : 64.194.92.63:53
+  Protocol   : UDP
+  Start time : 1705773003.326469
+  Duration   : 2.97 s
+  Packets    : 56
+  Bytes      : 3,673
+  Byte rate  : 1234.8 B/s
+  Entropy    : 7.9538 bits/byte
+  Burstiness : 3.0557
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.494540
+
+[0091] ──────────────────────────────────────────
+  Src        : 192.168.127.179:53324
+  Dst        : 146.211.126.181:8443
+  Protocol   : TCP
+  Start time : 1703997954.862198
+  Duration   : 353.27 s
+  Packets    : 1325
+  Bytes      : 4,225,021
+  Byte rate  : 11959.8 B/s
+  Entropy    : 7.9613 bits/byte
+  Burstiness : 2.2976
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.425295
+
+[0092] ──────────────────────────────────────────
+  Src        : 192.168.103.249:61988
+  Dst        : 92.175.81.161:6667
+  Protocol   : TCP
+  Start time : 1707522977.844465
+  Duration   : 456.48 s
+  Packets    : 1174
+  Bytes      : 2,467,717
+  Byte rate  : 5405.9 B/s
+  Entropy    : 7.9610 bits/byte
+  Burstiness : 1.4153
+  Heuristic score  : 95
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.394610
+
+[0093] ──────────────────────────────────────────
+  Src        : 192.168.143.143:58026
+  Dst        : 32.127.197.8:443
+  Protocol   : TCP
+  Start time : 1708797284.821282
+  Duration   : 59468.90 s
+  Packets    : 1191
+  Bytes      : 1,431,501
+  Byte rate  : 24.1 B/s
+  Entropy    : 7.8934 bits/byte
+  Burstiness : 1.5564
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, very_long_duration, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.524730
+
+[0094] ──────────────────────────────────────────
+  Src        : 192.168.54.162:62508
+  Dst        : 232.121.94.40:6667
+  Protocol   : TCP
+  Start time : 1707325700.4288223
+  Duration   : 100.79 s
+  Packets    : 3267
+  Bytes      : 4,828,106
+  Byte rate  : 47904.0 B/s
+  Entropy    : 7.9631 bits/byte
+  Burstiness : 1.6401
+  Heuristic score  : 85
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.436546
+
+[0095] ──────────────────────────────────────────
+  Src        : 192.168.247.25:51998
+  Dst        : 105.119.34.51:8080
+  Protocol   : TCP
+  Start time : 1709076048.913905
+  Duration   : 87.58 s
+  Packets    : 37
+  Bytes      : 82,486
+  Byte rate  : 941.8 B/s
+  Entropy    : 5.6410 bits/byte
+  Burstiness : 1.2145
+  Heuristic score  : 0
+  Heuristic label  : Benign
+  Triggered rules  : none
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.456913
+
+[0096] ──────────────────────────────────────────
+  Src        : 192.168.64.45:63682
+  Dst        : 125.42.62.25:53
+  Protocol   : UDP
+  Start time : 1701183101.7824793
+  Duration   : 25.00 s
+  Packets    : 43
+  Bytes      : 3,887
+  Byte rate  : 155.5 B/s
+  Entropy    : 7.9487 bits/byte
+  Burstiness : 1.9460
+  Heuristic score  : 60
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.456742
+
+[0097] ──────────────────────────────────────────
+  Src        : 192.168.247.30:59101
+  Dst        : 10.43.204.168:31337
+  Protocol   : TCP
+  Start time : 1702788378.3890197
+  Duration   : 91.85 s
+  Packets    : 1209
+  Bytes      : 4,086,247
+  Byte rate  : 44486.5 B/s
+  Entropy    : 7.9627 bits/byte
+  Burstiness : 2.9128
+  Heuristic score  : 90
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.511249
+
+[0098] ──────────────────────────────────────────
+  Src        : 192.168.47.124:49293
+  Dst        : 77.52.233.117:443
+  Protocol   : TCP
+  Start time : 1709186332.5979962
+  Duration   : 62838.51 s
+  Packets    : 267
+  Bytes      : 1,510,618
+  Byte rate  : 24.0 B/s
+  Entropy    : 7.9110 bits/byte
+  Burstiness : 4.2180
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, very_long_duration, high_burstiness, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.597819
+
+[0099] ──────────────────────────────────────────
+  Src        : 192.168.210.37:55151
+  Dst        : 231.82.196.180:443
+  Protocol   : TCP
+  Start time : 1703482215.4563892
+  Duration   : 66048.07 s
+  Packets    : 635
+  Bytes      : 1,714,400
+  Byte rate  : 26.0 B/s
+  Entropy    : 7.9166 bits/byte
+  Burstiness : 2.9365
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, very_long_duration, high_burstiness, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.570313
+
+[0100] ──────────────────────────────────────────
+  Src        : 192.168.94.190:65055
+  Dst        : 179.66.17.244:6667
+  Protocol   : TCP
+  Start time : 1709647367.0802789
+  Duration   : 452.62 s
+  Packets    : 4210
+  Bytes      : 461,738
+  Byte rate  : 1020.1 B/s
+  Entropy    : 7.9624 bits/byte
+  Burstiness : 2.0919
+  Heuristic score  : 75
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, long_duration, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.427590
+
+[0101] ──────────────────────────────────────────
+  Src        : 192.168.122.210:54494
+  Dst        : 180.133.33.204:53
+  Protocol   : UDP
+  Start time : 1707558934.1514156
+  Duration   : 17.08 s
+  Packets    : 46
+  Bytes      : 1,815
+  Byte rate  : 106.2 B/s
+  Entropy    : 7.8926 bits/byte
+  Burstiness : 1.5534
+  Heuristic score  : 60
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 0.9950
+  IF anomaly score : -0.468190
+
+[0102] ──────────────────────────────────────────
+  Src        : 192.168.158.226:55217
+  Dst        : 161.229.88.201:31337
+  Protocol   : TCP
+  Start time : 1705310972.2201211
+  Duration   : 696.37 s
+  Packets    : 1920
+  Bytes      : 4,465,699
+  Byte rate  : 6412.8 B/s
+  Entropy    : 7.9653 bits/byte
+  Burstiness : 1.5986
+  Heuristic score  : 95
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.486904
+
+[0103] ──────────────────────────────────────────
+  Src        : 192.168.203.96:54123
+  Dst        : 70.121.169.110:443
+  Protocol   : TCP
+  Start time : 1702448908.0376863
+  Duration   : 2869.26 s
+  Packets    : 33068
+  Bytes      : 42,221,238
+  Byte rate  : 14715.0 B/s
+  Entropy    : 7.9814 bits/byte
+  Burstiness : 0.7589
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.469780
+
+[0104] ──────────────────────────────────────────
+  Src        : 192.168.253.24:63789
+  Dst        : 190.214.226.57:5432
+  Protocol   : TCP
+  Start time : 1703736577.288737
+  Duration   : 52.22 s
+  Packets    : 24
+  Bytes      : 106,724
+  Byte rate  : 2043.8 B/s
+  Entropy    : 6.1209 bits/byte
+  Burstiness : 1.1808
+  Heuristic score  : 0
+  Heuristic label  : Benign
+  Triggered rules  : none
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.463654
+
+[0105] ──────────────────────────────────────────
+  Src        : 192.168.234.220:51831
+  Dst        : 213.67.220.117:443
+  Protocol   : TCP
+  Start time : 1708193588.5514376
+  Duration   : 484.64 s
+  Packets    : 49570
+  Bytes      : 32,092,594
+  Byte rate  : 66220.1 B/s
+  Entropy    : 7.9825 bits/byte
+  Burstiness : 1.1602
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.537818
+
+[0106] ──────────────────────────────────────────
+  Src        : 192.168.118.33:51054
+  Dst        : 61.197.79.91:1337
+  Protocol   : TCP
+  Start time : 1700737209.2579038
+  Duration   : 469.80 s
+  Packets    : 1970
+  Bytes      : 4,922,994
+  Byte rate  : 10479.0 B/s
+  Entropy    : 7.9625 bits/byte
+  Burstiness : 2.5006
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.417529
+
+[0107] ──────────────────────────────────────────
+  Src        : 192.168.127.165:51111
+  Dst        : 204.202.103.41:1337
+  Protocol   : TCP
+  Start time : 1706798742.8774397
+  Duration   : 344.10 s
+  Packets    : 4076
+  Bytes      : 4,614,693
+  Byte rate  : 13410.9 B/s
+  Entropy    : 7.9653 bits/byte
+  Burstiness : 0.9029
+  Heuristic score  : 95
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.397742
+
+[0108] ──────────────────────────────────────────
+  Src        : 192.168.44.80:61792
+  Dst        : 154.32.81.182:53
+  Protocol   : UDP
+  Start time : 1700221040.9972007
+  Duration   : 26.46 s
+  Packets    : 20
+  Bytes      : 7,493
+  Byte rate  : 283.2 B/s
+  Entropy    : 7.9764 bits/byte
+  Burstiness : 2.9842
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.480795
+
+[0109] ──────────────────────────────────────────
+  Src        : 192.168.224.8:50474
+  Dst        : 234.162.67.104:1337
+  Protocol   : TCP
+  Start time : 1703081241.3632345
+  Duration   : 107.57 s
+  Packets    : 713
+  Bytes      : 3,307,557
+  Byte rate  : 30747.8 B/s
+  Entropy    : 7.9661 bits/byte
+  Burstiness : 1.9357
+  Heuristic score  : 85
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 0.9950
+  IF anomaly score : -0.449148
+
+[0110] ──────────────────────────────────────────
+  Src        : 192.168.203.60:51047
+  Dst        : 35.178.196.154:25
+  Protocol   : TCP
+  Start time : 1704228003.3254678
+  Duration   : 40.34 s
+  Packets    : 5
+  Bytes      : 73,326
+  Byte rate  : 1817.6 B/s
+  Entropy    : 5.9371 bits/byte
+  Burstiness : 0.3696
+  Heuristic score  : 0
+  Heuristic label  : Benign
+  Triggered rules  : none
+  ML label         : Suspicious
+  RF confidence    : 0.8650
+  IF anomaly score : -0.514964
+
+[0111] ──────────────────────────────────────────
+  Src        : 192.168.234.203:58981
+  Dst        : 1.120.69.134:443
+  Protocol   : TCP
+  Start time : 1702602494.6090972
+  Duration   : 1711.77 s
+  Packets    : 35399
+  Bytes      : 6,338,874
+  Byte rate  : 3703.1 B/s
+  Entropy    : 7.9834 bits/byte
+  Burstiness : 0.7507
+  Heuristic score  : 95
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.443342
+
+[0112] ──────────────────────────────────────────
+  Src        : 192.168.252.153:50411
+  Dst        : 54.176.156.79:53
+  Protocol   : UDP
+  Start time : 1709395749.8760223
+  Duration   : 25.25 s
+  Packets    : 44
+  Bytes      : 821
+  Byte rate  : 32.5 B/s
+  Entropy    : 7.7823 bits/byte
+  Burstiness : 3.5467
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.490335
+
+[0113] ──────────────────────────────────────────
+  Src        : 192.168.239.173:63189
+  Dst        : 122.79.149.127:443
+  Protocol   : TCP
+  Start time : 1701705024.016879
+  Duration   : 26807.03 s
+  Packets    : 1047
+  Bytes      : 1,975,121
+  Byte rate  : 73.7 B/s
+  Entropy    : 7.9001 bits/byte
+  Burstiness : 1.4880
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, very_long_duration, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 0.9950
+  IF anomaly score : -0.501199
+
+[0114] ──────────────────────────────────────────
+  Src        : 192.168.126.201:49812
+  Dst        : 100.89.138.197:443
+  Protocol   : TCP
+  Start time : 1708362200.6404254
+  Duration   : 2299.20 s
+  Packets    : 41245
+  Bytes      : 40,088,837
+  Byte rate  : 17436.0 B/s
+  Entropy    : 7.9811 bits/byte
+  Burstiness : 0.8631
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.469758
+
+[0115] ──────────────────────────────────────────
+  Src        : 192.168.5.161:63987
+  Dst        : 226.219.218.88:443
+  Protocol   : TCP
+  Start time : 1701681988.496399
+  Duration   : 825.14 s
+  Packets    : 44973
+  Bytes      : 43,335,848
+  Byte rate  : 52519.3 B/s
+  Entropy    : 7.9797 bits/byte
+  Burstiness : 1.1437
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.526602
+
+[0116] ──────────────────────────────────────────
+  Src        : 192.168.148.205:49381
+  Dst        : 86.70.63.1:53
+  Protocol   : UDP
+  Start time : 1705830142.6622124
+  Duration   : 7.02 s
+  Packets    : 18
+  Bytes      : 5,156
+  Byte rate  : 734.5 B/s
+  Entropy    : 7.9648 bits/byte
+  Burstiness : 3.1045
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 0.9950
+  IF anomaly score : -0.485267
+
+[0117] ──────────────────────────────────────────
+  Src        : 192.168.44.200:49308
+  Dst        : 220.157.175.239:31337
+  Protocol   : TCP
+  Start time : 1701364609.9803805
+  Duration   : 553.41 s
+  Packets    : 1395
+  Bytes      : 2,033,540
+  Byte rate  : 3674.6 B/s
+  Entropy    : 7.9520 bits/byte
+  Burstiness : 2.2124
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.488536
+
+[0118] ──────────────────────────────────────────
+  Src        : 192.168.47.5:63708
+  Dst        : 162.212.151.125:443
+  Protocol   : TCP
+  Start time : 1702897990.6699092
+  Duration   : 34659.83 s
+  Packets    : 676
+  Bytes      : 579,206
+  Byte rate  : 16.7 B/s
+  Entropy    : 7.8897 bits/byte
+  Burstiness : 4.1393
+  Heuristic score  : 85
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, very_long_duration, high_burstiness, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.501654
+
+[0119] ──────────────────────────────────────────
+  Src        : 192.168.232.100:58375
+  Dst        : 144.63.47.125:53
+  Protocol   : UDP
+  Start time : 1704672733.6789234
+  Duration   : 15.90 s
+  Packets    : 56
+  Bytes      : 1,331
+  Byte rate  : 83.7 B/s
+  Entropy    : 7.8695 bits/byte
+  Burstiness : 2.9371
+  Heuristic score  : 65
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.473815
+
+[0120] ──────────────────────────────────────────
+  Src        : 192.168.221.95:62115
+  Dst        : 251.220.41.153:443
+  Protocol   : TCP
+  Start time : 1702711103.3521903
+  Duration   : 3045.54 s
+  Packets    : 19378
+  Bytes      : 28,188,962
+  Byte rate  : 9255.8 B/s
+  Entropy    : 7.9795 bits/byte
+  Burstiness : 0.4774
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, huge_transfer, very_long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.451151
+
+[0121] ──────────────────────────────────────────
+  Src        : 192.168.32.225:63840
+  Dst        : 190.32.218.80:8443
+  Protocol   : TCP
+  Start time : 1709826370.2484608
+  Duration   : 303.76 s
+  Packets    : 2151
+  Bytes      : 4,598,574
+  Byte rate  : 15138.9 B/s
+  Entropy    : 7.9584 bits/byte
+  Burstiness : 2.3040
+  Heuristic score  : 100
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, high_burstiness, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.427463
+
+[0122] ──────────────────────────────────────────
+  Src        : 192.168.104.120:60119
+  Dst        : 227.44.127.241:6667
+  Protocol   : TCP
+  Start time : 1701816633.5317774
+  Duration   : 405.62 s
+  Packets    : 2625
+  Bytes      : 266,593
+  Byte rate  : 657.2 B/s
+  Entropy    : 7.9595 bits/byte
+  Burstiness : 1.2657
+  Heuristic score  : 70
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 0.9750
+  IF anomaly score : -0.388099
+
+[0123] ──────────────────────────────────────────
+  Src        : 192.168.97.213:50523
+  Dst        : 129.156.40.144:443
+  Protocol   : TCP
+  Start time : 1709534459.1460857
+  Duration   : 32871.13 s
+  Packets    : 1286
+  Bytes      : 463,630
+  Byte rate  : 14.1 B/s
+  Entropy    : 7.9035 bits/byte
+  Burstiness : 2.1620
+  Heuristic score  : 85
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, very_long_duration, high_burstiness, suspicious_port
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.498549
+
+[0124] ──────────────────────────────────────────
+  Src        : 192.168.115.68:62529
+  Dst        : 60.252.189.213:8080
+  Protocol   : TCP
+  Start time : 1708246641.9045634
+  Duration   : 104.10 s
+  Packets    : 326
+  Bytes      : 22,923
+  Byte rate  : 220.2 B/s
+  Entropy    : 3.8674 bits/byte
+  Burstiness : 0.9322
+  Heuristic score  : 0
+  Heuristic label  : Benign
+  Triggered rules  : none
+  ML label         : Suspicious
+  RF confidence    : 1.0000
+  IF anomaly score : -0.450093
+
+[0125] ──────────────────────────────────────────
+  Src        : 192.168.56.90:60529
+  Dst        : 50.50.187.121:443
+  Protocol   : TCP
+  Start time : 1708840833.4772315
+  Duration   : 554.86 s
+  Packets    : 43082
+  Bytes      : 2,992,589
+  Byte rate  : 5393.5 B/s
+  Entropy    : 7.9809 bits/byte
+  Burstiness : 1.1005
+  Heuristic score  : 95
+  Heuristic label  : Possible Exfiltration
+  Triggered rules  : high_entropy, very_high_entropy, large_transfer, long_duration, suspicious_port
+  ML label         : Possible Exfiltration
+  RF confidence    : 1.0000
+  IF anomaly score : -0.457661
+

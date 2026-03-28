@@ -1,0 +1,7 @@
+======================================================================
+  FORENSIC EXFILTRATION DETECTION — SUSPICIOUS FLOW LOG
+  Generated: 2026-03-11T05:44:49.635975+00:00
+  Total flows analysed : 65
+  Flagged flows        : 35
+======================================================================
+
