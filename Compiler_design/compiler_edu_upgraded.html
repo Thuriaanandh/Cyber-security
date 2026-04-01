@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MiniCompiler — Multi-Line 6-Phase Compiler</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,500;0,700;1,300&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0a0c10; --surface:#111318; --surface2:#16191f;
+  --border:#1e222c; --border-bright:#2a3040;
+  --text:#c8d0e0; --text-dim:#5a6478; --text-bright:#eef2ff;
+  --accent:#4f8ef7; --accent-glow:rgba(79,142,247,0.15);
+  --green:#3dd68c; --green-glow:rgba(61,214,140,0.12);
+  --yellow:#f5c542; --red:#f76f72; --red-glow:rgba(247,111,114,0.12);
+  --purple:#b87fff; --cyan:#38d4d4; --orange:#ff9a57;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(79,142,247,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(79,142,247,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+.container{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:36px 24px 100px}
+
+/* HEADER */
+header{margin-bottom:40px;display:flex;align-items:flex-start;gap:18px}
+.logo-badge{width:50px;height:50px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 0 28px rgba(79,142,247,0.3)}
+.header-text h1{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--text-bright);letter-spacing:-0.5px}
+.header-text h1 span{color:var(--accent)}
+.header-text p{color:var(--text-dim);font-size:11px;margin-top:3px}
+
+/* PIPELINE */
+.pipeline{display:flex;align-items:center;margin-bottom:32px;overflow-x:auto;padding-bottom:4px;gap:0}
+.pipe-step{display:flex;align-items:center;flex-shrink:0}
+.pipe-label{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px 11px;font-size:10px;color:var(--text-dim);white-space:nowrap;transition:all .3s}
+.pipe-label.active{border-color:var(--accent);color:var(--accent);background:var(--accent-glow);box-shadow:0 0 10px rgba(79,142,247,0.2)}
+.pipe-label.has-error{border-color:var(--red);color:var(--red);background:var(--red-glow)}
+.pipe-arrow{width:22px;height:1px;background:var(--border);position:relative}
+.pipe-arrow::after{content:'▶';position:absolute;right:-4px;top:-5px;font-size:8px;color:var(--border-bright)}
+
+/* INPUT */
+.input-section{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;position:relative;overflow:hidden}
+.input-section::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--purple))}
+.input-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.input-label .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.input-row{display:flex;gap:12px;align-items:flex-start}
+#code-input{flex:1;background:var(--bg);border:1px solid var(--border-bright);border-radius:10px;padding:14px 18px;color:var(--text-bright);font-family:'JetBrains Mono',monospace;font-size:14px;outline:none;resize:vertical;min-height:130px;line-height:1.7;transition:border-color .2s,box-shadow .2s;tab-size:2}
+#code-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+#code-input::placeholder{color:var(--text-dim)}
+.btn-col{display:flex;flex-direction:column;gap:8px}
+.compile-btn{background:linear-gradient(135deg,var(--accent),#3070e0);border:none;border-radius:10px;padding:13px 24px;color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 18px rgba(79,142,247,0.3);white-space:nowrap}
+.compile-btn:hover{transform:translateY(-1px);box-shadow:0 6px 26px rgba(79,142,247,0.45)}
+.clear-btn{background:transparent;border:1px solid var(--border-bright);border-radius:10px;padding:10px 18px;color:var(--text-dim);font-family:'Syne',sans-serif;font-size:11px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.clear-btn:hover{border-color:var(--red);color:var(--red)}
+.examples{margin-top:12px;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.examples span{font-size:10px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase}
+.example-chip{background:transparent;border:1px solid var(--border-bright);border-radius:5px;padding:3px 9px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);cursor:pointer;transition:all .15s}
+.example-chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
+
+/* ERRORS PANEL */
+.errors-panel{display:none;background:rgba(247,111,114,0.05);border:1px solid rgba(247,111,114,0.38);border-radius:12px;overflow:hidden;margin-bottom:20px}
+.errors-panel.show{display:block}
+.errors-panel-hdr{display:flex;align-items:center;gap:10px;padding:11px 17px;border-bottom:1px solid rgba(247,111,114,0.18);background:rgba(247,111,114,0.04)}
+.err-badge{background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;font-family:'Syne',sans-serif}
+.errors-panel-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--red)}
+.error-item{display:flex;gap:11px;padding:10px 17px;border-bottom:1px solid rgba(247,111,114,0.09);align-items:flex-start}
+.error-item:last-child{border-bottom:none}
+.err-line-badge{background:rgba(247,111,114,0.14);color:var(--red);font-size:9px;padding:2px 6px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:2px;font-weight:700}
+.err-main{flex:1}
+.err-msg{color:var(--red);font-size:11px;font-weight:500}
+.err-hint{color:var(--text-dim);font-size:10px;margin-top:3px}
+.err-src{color:var(--text-dim);font-size:10px;margin-top:4px}
+.err-token{color:var(--yellow);background:rgba(245,197,66,0.12);padding:0 3px;border-radius:3px}
+
+/* CONST SCANNER */
+.const-scanner{background:var(--surface);border:1px solid rgba(245,197,66,0.3);border-radius:14px;overflow:hidden;margin-bottom:20px;opacity:0;transform:translateY(10px);transition:opacity .35s,transform .35s}
+.const-scanner.visible{opacity:1;transform:translateY(0)}
+.cs-hdr{display:flex;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid rgba(245,197,66,0.14);border-left:3px solid var(--yellow);background:rgba(245,197,66,0.03)}
+.cs-icon{width:26px;height:26px;border-radius:7px;background:rgba(245,197,66,0.15);color:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.cs-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--text-bright)}
+.cs-sub{font-size:10px;color:var(--text-dim)}
+.cs-badge{margin-left:auto;font-size:9px;padding:2px 7px;border-radius:4px;background:rgba(245,197,66,0.1);color:var(--yellow);letter-spacing:1px;text-transform:uppercase;font-weight:700}
+.cs-body{padding:14px 18px}
+.ce-pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.ce-pill{display:flex;align-items:center;gap:7px;background:var(--bg);border:1px solid rgba(245,197,66,0.2);border-radius:7px;padding:6px 11px;font-size:11px}
+.ce-pill-expr{color:var(--yellow);font-weight:500}
+.ce-pill-arrow{color:var(--text-dim)}
+.ce-pill-val{color:var(--green);font-weight:700}
+.ce-pill-line{color:var(--text-dim);font-size:9px}
+
+/* PHASE CARDS */
+.phases-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:700px){.phases-grid{grid-template-columns:1fr}}
+.phase-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;opacity:0;transform:translateY(14px);transition:opacity .4s,transform .4s}
+.phase-card.visible{opacity:1;transform:translateY(0)}
+.phase-card:nth-child(1){transition-delay:.04s}
+.phase-card:nth-child(2){transition-delay:.09s}
+.phase-card:nth-child(3){transition-delay:.13s}
+.phase-card:nth-child(4){transition-delay:.17s}
+.phase-card:nth-child(5){transition-delay:.21s}
+.phase-card:nth-child(6){transition-delay:.25s}
+.phase-header{display:flex;align-items:center;gap:11px;padding:14px 18px;border-bottom:1px solid var(--border)}
+.phase-num{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;flex-shrink:0}
+.phase-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--text-bright)}
+.phase-subtitle{font-size:10px;color:var(--text-dim)}
+.phase-badge{margin-left:auto;font-size:9px;padding:2px 7px;border-radius:4px;letter-spacing:1px;text-transform:uppercase;font-weight:700}
+.phase-body{padding:16px 18px;min-height:110px}
+.ph1 .phase-num{background:rgba(79,142,247,0.15);color:#4f8ef7}.ph1 .phase-header{border-left:3px solid #4f8ef7}.ph1 .phase-badge{background:rgba(79,142,247,0.1);color:#4f8ef7}
+.ph2 .phase-num{background:rgba(61,214,140,0.15);color:#3dd68c}.ph2 .phase-header{border-left:3px solid #3dd68c}.ph2 .phase-badge{background:rgba(61,214,140,0.1);color:#3dd68c}
+.ph3 .phase-num{background:rgba(184,127,255,0.15);color:#b87fff}.ph3 .phase-header{border-left:3px solid #b87fff}.ph3 .phase-badge{background:rgba(184,127,255,0.1);color:#b87fff}
+.ph4 .phase-num{background:rgba(245,197,66,0.15);color:#f5c542}.ph4 .phase-header{border-left:3px solid #f5c542}.ph4 .phase-badge{background:rgba(245,197,66,0.1);color:#f5c542}
+.ph5 .phase-num{background:rgba(255,154,87,0.15);color:#ff9a57}.ph5 .phase-header{border-left:3px solid #ff9a57}.ph5 .phase-badge{background:rgba(255,154,87,0.1);color:#ff9a57}
+.ph6 .phase-num{background:rgba(56,212,212,0.15);color:#38d4d4}.ph6 .phase-header{border-left:3px solid #38d4d4}.ph6 .phase-badge{background:rgba(56,212,212,0.1);color:#38d4d4}
+
+/* TOKEN TABLE */
+.token-table{width:100%;border-collapse:collapse;font-size:11px}
+.token-table th{text-align:left;padding:5px 9px;color:var(--text-dim);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.token-table td{padding:5px 9px;border-bottom:1px solid rgba(30,34,44,0.5);vertical-align:middle}
+.token-table tr:last-child td{border-bottom:none}
+.tok-value{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--text-bright)}
+.tok-type{display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.5px}
+.tt-IDENTIFIER{background:rgba(79,142,247,0.15);color:#4f8ef7}
+.tt-CONSTANT{background:rgba(61,214,140,0.15);color:#3dd68c}
+.tt-OPERATOR{background:rgba(245,197,66,0.15);color:#f5c542}
+.tt-LPAREN,.tt-RPAREN{background:rgba(184,127,255,0.15);color:#b87fff}
+.tt-ASSIGN{background:rgba(255,154,87,0.15);color:#ff9a57}
+.tt-SEMICOLON{background:rgba(56,212,212,0.12);color:#38d4d4}
+.tt-KEYWORD{background:rgba(247,111,114,0.15);color:#f76f72}
+.tt-STRING{background:rgba(56,212,212,0.15);color:#38d4d4}
+.tok-line{color:var(--text-dim);font-size:10px}
+.token-count{margin-top:8px;padding:7px 9px;background:var(--bg);border-radius:6px;font-size:10px;color:var(--text-dim)}
+.token-count strong{color:var(--accent)}
+
+/* AST */
+.stmt-block{margin-bottom:14px;padding:11px 14px;background:var(--bg);border-radius:8px;border-left:2px solid var(--border-bright)}
+.stmt-block-label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px;font-family:'Syne',sans-serif;font-weight:700}
+.ast-tree{font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.9;color:var(--text)}
+.ast-node{white-space:pre}
+.ast-op{color:#f5c542;font-weight:700}
+.ast-id{color:#4f8ef7}
+.ast-num{color:#3dd68c}
+.ast-assign{color:#ff9a57;font-weight:700}
+.ast-kw{color:#f76f72;font-weight:700}
+.ast-type{color:#b87fff}
+.ast-err{color:var(--red);font-style:italic}
+
+/* SEM */
+.sem-check{display:flex;align-items:flex-start;gap:9px;padding:6px 0;border-bottom:1px solid rgba(30,34,44,0.4);font-size:11px}
+.sem-check:last-child{border-bottom:none}
+.sem-icon{width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;margin-top:2px}
+.sem-ok{background:rgba(61,214,140,0.2);color:#3dd68c}
+.sem-warn{background:rgba(245,197,66,0.2);color:#f5c542}
+.sem-err{background:rgba(247,111,114,0.2);color:#f76f72}
+.sem-info{background:rgba(79,142,247,0.2);color:#4f8ef7}
+.sem-text{color:var(--text)}
+.sem-text em{color:var(--cyan);font-style:normal}
+
+/* CODE BLOCKS */
+.code-block{background:var(--bg);border-radius:8px;padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:2}
+.code-line{display:flex;gap:14px;align-items:center}
+.code-lnum{color:var(--text-dim);font-size:10px;width:16px;text-align:right;flex-shrink:0}
+.code-text{color:var(--text);flex:1}
+.c-tmp{color:var(--orange)}
+.c-var{color:var(--accent)}
+.c-num{color:var(--green)}
+.c-op{color:var(--yellow)}
+.c-cmt{color:var(--text-dim);font-style:italic}
+.code-sep{height:1px;background:var(--border);margin:5px 0}
+.code-sep-label{font-size:9px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;margin:7px 0 3px;padding:0 2px}
+
+/* SYMBOL TABLE */
+.sym-table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:12px}
+.sym-table th{text-align:left;padding:5px 9px;color:var(--text-dim);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.sym-table td{padding:6px 9px;border-bottom:1px solid rgba(30,34,44,0.4)}
+.sym-table tr:last-child td{border-bottom:none}
+.sym-type-badge{display:inline-block;padding:1px 7px;border-radius:4px;font-size:9px;font-weight:700}
+.stype-int{background:rgba(184,127,255,0.15);color:#b87fff}
+.stype-float,.stype-double{background:rgba(56,212,212,0.15);color:#38d4d4}
+.stype-inferred{background:rgba(79,142,247,0.12);color:#4f8ef7}
+.sym-val{color:var(--green);font-weight:600}
+.sym-undef{color:var(--text-dim);font-style:italic}
+
+/* FINAL TAC */
+.final-tac-wrap{margin-top:22px}
+.final-tac-card{background:var(--surface);border:1px solid rgba(56,212,212,0.25);border-radius:14px;overflow:hidden;opacity:0;transform:translateY(14px);transition:opacity .4s .35s,transform .4s .35s}
+.final-tac-card.visible{opacity:1;transform:translateY(0)}
+.ftac-hdr{display:flex;align-items:center;gap:12px;padding:15px 22px;border-bottom:1px solid rgba(56,212,212,0.1);border-left:3px solid var(--cyan);background:rgba(56,212,212,0.02)}
+.ftac-icon{width:30px;height:30px;border-radius:8px;background:rgba(56,212,212,0.1);color:var(--cyan);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.ftac-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--text-bright)}
+.ftac-sub{font-size:10px;color:var(--text-dim)}
+.ftac-badge{margin-left:auto;font-size:9px;padding:2px 9px;border-radius:4px;background:rgba(56,212,212,0.1);color:var(--cyan);letter-spacing:1px;text-transform:uppercase;font-weight:700}
+.final-tac-body{padding:18px 22px}
+.tac-columns{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:650px){.tac-columns{grid-template-columns:1fr}}
+.tac-col-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:9px}
+.tac-col-label.raw{color:#4f8ef7}
+.tac-col-label.opt{color:#ff9a57}
+.tac-legend{margin-top:14px;padding:10px 13px;background:var(--bg);border-radius:7px;font-size:10px;color:var(--text-dim);display:flex;flex-wrap:wrap;gap:12px}
+.tac-legend span{display:flex;align-items:center;gap:5px}
+.ldot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+.placeholder-msg{color:var(--text-dim);font-size:11px;font-style:italic;text-align:center;padding:18px 0}
+
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:3px}
+
+/* STRICT MODE TOGGLE */
+.strict-toggle-wrap{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px;background:var(--bg);border:1px solid var(--border-bright);border-radius:8px}
+.strict-label{font-size:11px;color:var(--text-dim);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.5px}
+.strict-badge{font-size:9px;padding:2px 8px;border-radius:4px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.strict-badge.on{background:rgba(247,111,114,0.15);color:var(--red)}
+.strict-badge.off{background:rgba(61,214,140,0.12);color:var(--green)}
+/* Toggle switch */
+.toggle-switch{position:relative;width:38px;height:20px;flex-shrink:0;cursor:pointer}
+.toggle-switch input{opacity:0;width:0;height:0;position:absolute}
+.toggle-slider{position:absolute;inset:0;background:#1e222c;border-radius:20px;border:1px solid var(--border-bright);transition:background .2s}
+.toggle-slider::before{content:'';position:absolute;width:14px;height:14px;left:2px;top:2px;border-radius:50%;background:var(--text-dim);transition:transform .2s,background .2s}
+.toggle-switch input:checked + .toggle-slider{background:rgba(247,111,114,0.25);border-color:var(--red)}
+.toggle-switch input:checked + .toggle-slider::before{transform:translateX(18px);background:var(--red)}
+.strict-desc{font-size:10px;color:var(--text-dim);margin-left:4px}
+
+/* TERMINATION BANNER */
+.termination-banner{display:none;align-items:center;gap:14px;padding:14px 20px;border-radius:10px;background:rgba(247,111,114,0.07);border:1px solid rgba(247,111,114,0.35);margin-bottom:18px}
+.termination-banner.show{display:flex}
+.tb-icon{font-size:22px;flex-shrink:0}
+.tb-text strong{display:block;color:var(--red);font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:2px}
+.tb-text span{font-size:11px;color:var(--text-dim)}
+.tb-mode{margin-left:auto;font-size:9px;padding:3px 9px;border-radius:4px;background:rgba(247,111,114,0.12);color:var(--red);font-weight:700;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+
+/* DISABLED PHASE CARDS */
+.phase-card.phase-disabled{opacity:0.32;filter:grayscale(0.6);pointer-events:none}
+.phase-card.phase-disabled .phase-body::after{content:'Skipped — semantic errors';display:block;text-align:center;color:var(--red);font-size:10px;padding:8px 0;font-style:italic;opacity:.7}
+
+/* TOKEN CATEGORY TABLE (side-by-side with token table) */
+.lexer-tables-wrap{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.lexer-tables-wrap .token-table-col{flex:1;min-width:180px}
+.token-cat-label{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px}
+.cat-table{width:100%;border-collapse:collapse;font-size:11px}
+.cat-table th{text-align:left;padding:5px 9px;color:var(--text-dim);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.cat-table td{padding:5px 9px;border-bottom:1px solid rgba(30,34,44,0.5);vertical-align:top}
+.cat-table tr:last-child td{border-bottom:none}
+.cat-values{color:var(--text-bright);font-size:10px;word-break:break-all}
+.cat-lines{color:var(--text-dim);font-size:9px}
+
+/* WARNING items in errors panel */
+.error-item.warn-item .err-msg{color:var(--yellow)}
+.error-item.warn-item .err-line-badge{background:rgba(245,197,66,0.14);color:var(--yellow)}
+
+/* PARSE TREE VISUAL */
+.ptree-wrap{margin-top:22px}
+.ptree-card{background:var(--surface);border:1px solid rgba(184,127,255,0.28);border-radius:14px;overflow:hidden;opacity:0;transform:translateY(14px);transition:opacity .4s .25s,transform .4s .25s}
+.ptree-card.visible{opacity:1;transform:translateY(0)}
+.ptree-hdr{display:flex;align-items:center;gap:12px;padding:15px 22px;border-bottom:1px solid rgba(184,127,255,0.12);border-left:3px solid var(--purple);background:rgba(184,127,255,0.03)}
+.ptree-icon{width:30px;height:30px;border-radius:8px;background:rgba(184,127,255,0.12);color:var(--purple);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.ptree-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--text-bright)}
+.ptree-sub{font-size:10px;color:var(--text-dim)}
+.ptree-badge{margin-left:auto;font-size:9px;padding:2px 9px;border-radius:4px;background:rgba(184,127,255,0.1);color:var(--purple);letter-spacing:1px;text-transform:uppercase;font-weight:700}
+.ptree-body{padding:18px 22px}
+.ptree-stmt-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px}
+.ptree-svg-wrap{overflow-x:auto;overflow-y:auto;background:var(--bg);border-radius:10px;padding:18px 12px;margin-bottom:10px;border:1px solid var(--border);min-height:120px}
+.ptree-svg-wrap svg{display:block;margin:0 auto}
+.ptree-err-note{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:8px;background:rgba(247,111,114,0.06);border:1px solid rgba(247,111,114,0.2);margin-top:8px;font-size:11px;color:var(--red)}
+.ptree-err-note .pte-icon{font-size:15px;flex-shrink:0}
+
+/* DAG */
+.dag-wrap{margin-top:22px}
+.dag-card{background:var(--surface);border:1px solid rgba(56,212,212,0.28);border-radius:14px;overflow:hidden;opacity:0;transform:translateY(14px);transition:opacity .4s .3s,transform .4s .3s}
+.dag-card.visible{opacity:1;transform:translateY(0)}
+.dag-hdr{display:flex;align-items:center;gap:12px;padding:15px 22px;border-bottom:1px solid rgba(56,212,212,0.12);border-left:3px solid var(--cyan);background:rgba(56,212,212,0.02)}
+.dag-icon{width:30px;height:30px;border-radius:8px;background:rgba(56,212,212,0.1);color:var(--cyan);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.dag-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--text-bright)}
+.dag-sub{font-size:10px;color:var(--text-dim)}
+.dag-badge{margin-left:auto;font-size:9px;padding:2px 9px;border-radius:4px;background:rgba(56,212,212,0.1);color:var(--cyan);letter-spacing:1px;text-transform:uppercase;font-weight:700}
+.dag-body{padding:18px 22px}
+.dag-svg-wrap{overflow-x:auto;overflow-y:auto;background:var(--bg);border-radius:10px;padding:18px 12px;border:1px solid var(--border);min-height:160px}
+.dag-svg-wrap svg{display:block;margin:0 auto}
+.dag-legend{margin-top:12px;display:flex;flex-wrap:wrap;gap:14px;font-size:10px;color:var(--text-dim)}
+.dag-legend span{display:flex;align-items:center;gap:6px}
+.dl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="logo-badge">&#9881;</div>
+  <div class="header-text">
+    <h1>Mini<span>Compiler</span></h1>
+    <p>Multi-Line 6-Phase Educational Compiler &nbsp;&middot;&nbsp; Declarations &middot; Assignments &middot; Parse Trees &middot; TAC &middot; Error Diagnostics</p>
+  </div>
+</header>
+
+<div class="pipeline">
+  <div class="pipe-step"><div class="pipe-label" id="pl1">Lexical</div><div class="pipe-arrow"></div></div>
+  <div class="pipe-step"><div class="pipe-label" id="pl2">Syntax</div><div class="pipe-arrow"></div></div>
+  <div class="pipe-step"><div class="pipe-label" id="pl3">Semantic</div><div class="pipe-arrow"></div></div>
+  <div class="pipe-step"><div class="pipe-label" id="pl4">Inter.Code</div><div class="pipe-arrow"></div></div>
+  <div class="pipe-step"><div class="pipe-label" id="pl5">Optimize</div><div class="pipe-arrow"></div></div>
+  <div class="pipe-step"><div class="pipe-label" id="pl6">Target</div></div>
+</div>
+
+<div class="input-section">
+  <div class="input-label"><span class="dot"></span>Source Code</div>
+  <div class="input-row">
+    <textarea id="code-input" spellcheck="false" placeholder="Enter multi-line code, e.g.:&#10;int a = 5;&#10;int b = 4;&#10;a = (b + 2) * 3;">int a = 5;
+int b = 4;
+int c = 2;
+a = (b + c) * 2;</textarea>
+    <div class="btn-col">
+      <button class="compile-btn" onclick="compile()">&#9654; Compile</button>
+      <button class="clear-btn" onclick="clearAll()">&#x2715; Clear</button>
+    </div>
+  </div>
+  <div class="examples">
+    <span>Try:</span>
+    <button class="example-chip" onclick="setEx('ex1')">Decl + Expr</button>
+    <button class="example-chip" onclick="setEx('ex2')">All Constants</button>
+    <button class="example-chip" onclick="setEx('ex3')">Multi Assign</button>
+    <button class="example-chip" onclick="setEx('ex4')">Syntax Error</button>
+    <button class="example-chip" onclick="setEx('ex5')">Undeclared Var</button>
+    <button class="example-chip" onclick="setEx('ex6')" style="border-color:rgba(247,111,114,0.4);color:var(--red)">Type Mismatch</button>
+    <button class="example-chip" onclick="setEx('ex7')" style="border-color:rgba(245,197,66,0.4);color:var(--yellow)">Precision Loss</button>
+  </div>
+  <!-- STRICT MODE TOGGLE -->
+  <div class="strict-toggle-wrap">
+    <label class="toggle-switch" title="Toggle strict compilation mode">
+      <input type="checkbox" id="strict-mode-cb" checked onchange="updateStrictBadge()">
+      <span class="toggle-slider"></span>
+    </label>
+    <span class="strict-label">Strict Mode</span>
+    <span class="strict-badge on" id="strict-mode-badge">ON</span>
+    <span class="strict-desc">— stops compilation after semantic errors (like a real compiler)</span>
+  </div>
+</div>
+
+<!-- TERMINATION BANNER (shown when strict mode stops compilation) -->
+<div class="termination-banner" id="termination-banner">
+  <div class="tb-icon">&#x1F6AB;</div>
+  <div class="tb-text">
+    <strong>Compilation Terminated</strong>
+    <span>Semantic errors prevent code generation. Fix all errors and recompile.</span>
+  </div>
+  <div class="tb-mode">STRICT MODE</div>
+</div>
+
+<!-- ERRORS PANEL -->
+<div class="errors-panel" id="errors-panel">
+  <div class="errors-panel-hdr">
+    <span class="errors-panel-title">&#9888;&nbsp; Compilation Errors</span>
+    <span class="err-badge" id="err-count">0</span>
+  </div>
+  <div id="errors-list"></div>
+</div>
+
+<!-- CONSTANT SCANNER -->
+<div class="const-scanner" id="const-scanner">
+  <div class="cs-hdr">
+    <div class="cs-icon">&#9889;</div>
+    <div><div class="cs-title">Constant Expression Scanner</div><div class="cs-sub">Pre-compilation pass &mdash; identifies compile-time constants before any phase runs</div></div>
+    <div class="cs-badge">Early Scan</div>
+  </div>
+  <div class="cs-body" id="cs-body"><div class="placeholder-msg">Awaiting input&hellip;</div></div>
+</div>
+
+<!-- PHASE CARDS -->
+<div class="phases-grid">
+  <div class="phase-card ph1" id="card1">
+    <div class="phase-header"><div class="phase-num">01</div><div><div class="phase-title">Lexical Analysis</div><div class="phase-subtitle">Tokenizer / Scanner</div></div><div class="phase-badge">LEXER</div></div>
+    <div class="phase-body" id="body1"><div class="placeholder-msg">Awaiting input&hellip;</div></div>
+  </div>
+  <div class="phase-card ph2" id="card2">
+    <div class="phase-header"><div class="phase-num">02</div><div><div class="phase-title">Syntax Analysis</div><div class="phase-subtitle">Parse Tree &middot; Per Statement</div></div><div class="phase-badge">PARSER</div></div>
+    <div class="phase-body" id="body2"><div class="placeholder-msg">Awaiting input&hellip;</div></div>
+  </div>
+  <div class="phase-card ph3" id="card3">
+    <div class="phase-header"><div class="phase-num">03</div><div><div class="phase-title">Semantic Analysis</div><div class="phase-subtitle">Symbol Table &amp; Type Checks</div></div><div class="phase-badge">SEMANTIC</div></div>
+    <div class="phase-body" id="body3"><div class="placeholder-msg">Awaiting input&hellip;</div></div>
+  </div>
+  <div class="phase-card ph4" id="card4">
+    <div class="phase-header"><div class="phase-num">04</div><div><div class="phase-title">Intermediate Code</div><div class="phase-subtitle">Three-Address Code (TAC)</div></div><div class="phase-badge">TAC</div></div>
+    <div class="phase-body" id="body4"><div class="placeholder-msg">Awaiting input&hellip;</div></div>
+  </div>
+  <div class="phase-card ph5" id="card5">
+    <div class="phase-header"><div class="phase-num">05</div><div><div class="phase-title">Optimization</div><div class="phase-subtitle">Constant Folding &middot; Copy Elim.</div></div><div class="phase-badge">OPT</div></div>
+    <div class="phase-body" id="body5"><div class="placeholder-msg">Awaiting input&hellip;</div></div>
+  </div>
+  <div class="phase-card ph6" id="card6">
+    <div class="phase-header"><div class="phase-num">06</div><div><div class="phase-title">Target Code</div><div class="phase-subtitle">Pseudo-Assembly Output</div></div><div class="phase-badge">ASM</div></div>
+    <div class="phase-body" id="body6"><div class="placeholder-msg">Awaiting input&hellip;</div></div>
+  </div>
+</div>
+
+<!-- FINAL TAC SUMMARY -->
+<div class="final-tac-wrap">
+  <div class="final-tac-card" id="final-tac-card">
+    <div class="ftac-hdr">
+      <div class="ftac-icon">&#9998;</div>
+      <div><div class="ftac-title">Final TAC Summary</div><div class="ftac-sub">Complete Three-Address Code for all statements &mdash; Raw vs Optimised side-by-side</div></div>
+      <div class="ftac-badge">TAC Summary</div>
+    </div>
+    <div class="final-tac-body" id="final-tac-body"><div class="placeholder-msg">Awaiting compilation&hellip;</div></div>
+  </div>
+</div>
+
+<!-- PARSE TREE VISUAL -->
+<div class="ptree-wrap">
+  <div class="ptree-card" id="ptree-card">
+    <div class="ptree-hdr">
+      <div class="ptree-icon">&#9903;</div>
+      <div><div class="ptree-title">Parse Tree Visualizer</div><div class="ptree-sub">Single unified parse tree for the entire program &mdash; ellipse nodes &amp; directed edges</div></div>
+      <div class="ptree-badge">Parse Tree</div>
+    </div>
+    <div class="ptree-body" id="ptree-body"><div class="placeholder-msg">Awaiting compilation&hellip;</div></div>
+  </div>
+</div>
+
+<!-- DAG VISUALIZER -->
+<div class="dag-wrap">
+  <div class="dag-card" id="dag-card">
+    <div class="dag-hdr">
+      <div class="dag-icon">&#9671;</div>
+      <div><div class="dag-title">DAG — Directed Acyclic Graph</div><div class="dag-sub">Optimized graph &mdash; shared subexpressions collapsed into single nodes (teal glow), eliminating redundant computation</div></div>
+      <div class="dag-badge">DAG</div>
+    </div>
+    <div class="dag-body" id="dag-body"><div class="placeholder-msg">Awaiting compilation&hellip;</div></div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   MINICOMPILER v3  —  Multi-line, typed declarations, symbol table,
+                       parse trees, TAC, detailed error diagnostics
+   ═══════════════════════════════════════════════════════════════════ */
+
+const EXAMPLES = {
+  ex1: `int a = 5;\nint b = 4;\nint c = 2;\na = (b + c) * 2;`,
+  ex2: `int x = (2 + 3) * 4;\nint y = 10;\ny = (10 + 5) * (2 - 1);`,
+  ex3: `int a = 5;\nint b = 4;\nint c = 2;\nint d = 3;\na = (b + c) * d;\nb = a - c / 2;\nc = a * b + d;`,
+  ex4: `int a = 5;\nint b = 4;\na = (b + c *;`,
+  ex5: `int a = 5;\na = b + 3;`,
+  // Type error examples (new)
+  ex6: `int a = "hello";\nint b = 5;`,
+  ex7: `int a = 5.7;\nint b = 3;\nfloat c = 2.5;`,
+};
+
+function setEx(k){ document.getElementById('code-input').value = EXAMPLES[k]; compile(); }
+function clearAll(){ document.getElementById('code-input').value = ''; resetUI(); }
+
+/* ── Strict Mode helpers ─────────────────────────────────────────── */
+function isStrictMode(){ return document.getElementById('strict-mode-cb').checked; }
+function updateStrictBadge(){
+  const on = isStrictMode();
+  const badge = document.getElementById('strict-mode-badge');
+  badge.textContent = on ? 'ON' : 'OFF';
+  badge.className = 'strict-badge ' + (on ? 'on' : 'off');
+}
+
+// ── Token Types ──────────────────────────────────────────────────────
+const TT = {
+  KEYWORD:'KEYWORD', IDENTIFIER:'IDENTIFIER', CONSTANT:'CONSTANT',
+  OPERATOR:'OPERATOR', ASSIGN:'ASSIGN', LPAREN:'LPAREN', RPAREN:'RPAREN',
+  SEMICOLON:'SEMICOLON', STRING:'STRING', EOF:'EOF'
+};
+const KEYWORDS = new Set(['int','float','double','char','bool','void']);
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE 1 — LEXER
+   Tokenises entire source; attaches line numbers to each token.
+   Unknown characters are recorded as errors and skipped (recovery).
+   Now also tokenises string literals for type-error detection.
+   ═══════════════════════════════════════════════════════════════════ */
+function lexer(src){
+  const tokens=[], errors=[];
+  let i=0, line=1;
+  while(i<src.length){
+    const ch=src[i];
+    if(ch==='\n'){line++;i++;continue;}
+    if(/\s/.test(ch)){i++;continue;}
+    // string literal — capture for type-checking
+    if(ch==='"'||ch==="'"){
+      const q=ch; let s=''; i++;
+      while(i<src.length&&src[i]!==q&&src[i]!=='\n') s+=src[i++];
+      if(i<src.length&&src[i]===q) i++; // consume closing quote
+      tokens.push({type:TT.STRING,value:s,line});
+      continue;
+    }
+    // number (integer or float)
+    if(/[0-9]/.test(ch)){
+      let n='';
+      while(i<src.length&&/[0-9.]/.test(src[i])) n+=src[i++];
+      tokens.push({type:TT.CONSTANT,value:n,line});
+      continue;
+    }
+    // identifier / keyword
+    if(/[a-zA-Z_]/.test(ch)){
+      let id='';
+      while(i<src.length&&/[a-zA-Z0-9_]/.test(src[i])) id+=src[i++];
+      tokens.push({type:KEYWORDS.has(id)?TT.KEYWORD:TT.IDENTIFIER,value:id,line});
+      continue;
+    }
+    if(ch==='='){tokens.push({type:TT.ASSIGN,value:'=',line});i++;continue;}
+    if('+-*/'.includes(ch)){tokens.push({type:TT.OPERATOR,value:ch,line});i++;continue;}
+    if(ch==='('){tokens.push({type:TT.LPAREN,value:'(',line});i++;continue;}
+    if(ch===')'){tokens.push({type:TT.RPAREN,value:')',line});i++;continue;}
+    if(ch===';'){tokens.push({type:TT.SEMICOLON,value:';',line});i++;continue;}
+    // unknown — record error and continue
+    errors.push({line,msg:`Unknown character '${ch}'`,
+      hint:`The character '${ch}' is not part of the supported language. Remove it.`,
+      src:ch});
+    i++;
+  }
+  tokens.push({type:TT.EOF,value:'EOF',line});
+  return {tokens,errors};
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LEXER HELPER — Build Token Category Groups
+   Groups tokens by type so we can render a "Token Category Table"
+   side-by-side with the regular token table.
+   ═══════════════════════════════════════════════════════════════════ */
+function buildTokenGroups(tokens){
+  // Categories map: type → {values: Set, lines: Set}
+  const groups = {};
+  const ORDER = ['KEYWORD','IDENTIFIER','CONSTANT','STRING','OPERATOR','ASSIGN','LPAREN','RPAREN','SEMICOLON'];
+  ORDER.forEach(k => groups[k] = {values:[], lines:new Set()});
+
+  tokens.forEach(t => {
+    if(t.type === TT.EOF) return;
+    const g = groups[t.type];
+    if(!g) return;
+    if(!g.values.includes(t.value)) g.values.push(t.value);
+    g.lines.add(t.line);
+  });
+  return {groups, ORDER};
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE 2 — PARSER  (recursive-descent, per statement, with recovery)
+   Grammar:
+     program     → statement* EOF
+     statement   → decl_stmt | assign_stmt
+     decl_stmt   → KEYWORD IDENTIFIER ('=' expr)? ';'
+     assign_stmt → IDENTIFIER '=' expr ';'
+     expr        → term  (('+' | '-')  term)*
+     term        → factor (('*' | '/') factor)*
+     factor      → '(' expr ')' | CONSTANT | IDENTIFIER
+   Error recovery: on exception, skip tokens up to next ';' or EOF.
+   ═══════════════════════════════════════════════════════════════════ */
+function parser(tokens){
+  let pos=0;
+  const stmts=[], errors=[];
+
+  function peek(){ return tokens[pos]||{type:TT.EOF,value:'EOF',line:0}; }
+  function advance(){ return tokens[pos++]; }
+  function check(type,val){ const t=peek(); return t.type===type&&(val===undefined||t.value===val); }
+
+  function expect(type,val){
+    if(check(type,val)) return advance();
+    const t=peek();
+    const got=t.type===TT.EOF?'end of input':`'${t.value}' (${t.type})`;
+    const exp=val?`'${val}'`:type;
+    throw {msg:`Expected ${exp} but got ${got}`, token:t, hint:hint(type,val,t)};
+  }
+
+  function hint(eType,eVal,got){
+    if(eType===TT.SEMICOLON) return `Every statement must end with ';'. Add ';' after '${esc(got.value)}'.`;
+    if(eType===TT.RPAREN)    return `Missing closing ')'. Check your parentheses are balanced.`;
+    if(eType===TT.IDENTIFIER) return `A variable name was expected here, but got '${esc(got.value)}'.`;
+    if(eType===TT.ASSIGN)     return `Assignment '=' expected. Did you forget '='?`;
+    return `Unexpected '${esc(got.value)}'. Check expression syntax.`;
+  }
+
+  // Panic-mode recovery: skip to ';' or EOF
+  function sync(){
+    while(peek().type!==TT.SEMICOLON&&peek().type!==TT.EOF) advance();
+    if(peek().type===TT.SEMICOLON) advance();
+  }
+
+  function parseExpr(){
+    let node=parseTerm();
+    while(check(TT.OPERATOR)&&'+-'.includes(peek().value)){
+      const op=advance().value;
+      node={type:'BinOp',op,left:node,right:parseTerm()};
+    }
+    return node;
+  }
+
+  function parseTerm(){
+    let node=parseFactor();
+    while(check(TT.OPERATOR)&&'*/'.includes(peek().value)){
+      const op=advance().value;
+      node={type:'BinOp',op,left:node,right:parseFactor()};
+    }
+    return node;
+  }
+
+  function parseFactor(){
+    const t=peek();
+    if(t.type===TT.EOF)       throw {msg:'Unexpected end of expression',token:t,hint:'Expression is incomplete — an operand or closing parenthesis is missing.'};
+    if(t.type===TT.SEMICOLON) throw {msg:`Unexpected ';' in expression`,token:t,hint:'An operand was expected before the semicolon.'};
+    if(t.type===TT.LPAREN){
+      advance();
+      const node=parseExpr();
+      expect(TT.RPAREN,')');
+      return node;
+    }
+    if(t.type===TT.CONSTANT){ advance(); return {type:'Num',value:Number(t.value),line:t.line}; }
+    if(t.type===TT.IDENTIFIER){ advance(); return {type:'Var',name:t.value,line:t.line}; }
+    // String literals — create a String AST node for type checking
+    if(t.type===TT.STRING){ advance(); return {type:'StringLit',value:t.value,line:t.line}; }
+    if(t.type===TT.OPERATOR) throw {msg:`Unexpected operator '${t.value}' — an operand was expected`,token:t,hint:`Remove the stray '${t.value}' or insert a missing operand before it.`};
+    throw {msg:`Unexpected token '${t.value}'`,token:t,hint:`'${esc(t.value)}' cannot appear here in an expression.`};
+  }
+
+  function parseStatement(){
+    const t=peek();
+    // Declaration
+    if(t.type===TT.KEYWORD){
+      const kw=advance();
+      try{
+        const id=expect(TT.IDENTIFIER);
+        let init=null;
+        if(check(TT.ASSIGN)){advance(); init=parseExpr();}
+        expect(TT.SEMICOLON,';');
+        return {type:'Decl',varType:kw.value,name:id.value,init,line:kw.line};
+      }catch(e){
+        errors.push({line:(e.token||t).line,msg:e.msg,hint:e.hint,src:(e.token||t).value});
+        sync();
+        return {type:'ErrorStmt',line:t.line,msg:e.msg};
+      }
+    }
+    // Assignment
+    if(t.type===TT.IDENTIFIER){
+      const id=advance();
+      try{
+        expect(TT.ASSIGN,'=');
+        const expr=parseExpr();
+        expect(TT.SEMICOLON,';');
+        return {type:'Assign',target:id.value,expr,line:id.line};
+      }catch(e){
+        errors.push({line:(e.token||t).line,msg:e.msg,hint:e.hint,src:(e.token||t).value});
+        sync();
+        return {type:'ErrorStmt',line:t.line,msg:e.msg};
+      }
+    }
+    // Unknown
+    errors.push({line:t.line,msg:`Unexpected token '${t.value}' at line ${t.line}`,hint:`Statements must start with a type keyword (int, float…) or a variable name.`,src:t.value});
+    advance(); sync();
+    return {type:'ErrorStmt',line:t.line,msg:`Unexpected '${t.value}'`};
+  }
+
+  while(peek().type!==TT.EOF) stmts.push(parseStatement());
+  return {stmts,errors};
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE 3 — SEMANTIC ANALYSIS  (upgraded)
+   Builds a symbol table from Decl nodes.
+   Checks every Var reference is declared before use.
+   Computes compile-time values where possible.
+
+   NEW: Type inference + strict type checking.
+   Real compilers stop code generation on semantic errors —
+   this implementation reflects that with STRICT_MODE support.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Type Inference ──────────────────────────────────────────────── */
+function inferType(node, symbolTable){
+  if(!node) return null;
+  if(node.type==='Num'){
+    // Distinguish int vs float by checking if value is integer
+    return Number.isInteger(node.value) ? 'int' : 'float';
+  }
+  if(node.type==='StringLit') return 'string';
+  if(node.type==='Var'){
+    const s = symbolTable[node.name];
+    return s ? s.type : null;
+  }
+  if(node.type==='BinOp'){
+    const l = inferType(node.left, symbolTable);
+    const r = inferType(node.right, symbolTable);
+    return promoteType(l, r);
+  }
+  return null;
+}
+
+/* ── Type Promotion Rules ────────────────────────────────────────── */
+// Precision hierarchy: int < float < double
+// string is INVALID for arithmetic — returns 'string' to trigger error
+function promoteType(a, b){
+  if(a==='string'||b==='string') return 'string';
+  if(a===null||b===null) return a||b; // one unknown, propagate what we have
+  const rank = {int:0, float:1, double:2};
+  const ra = rank[a]??-1, rb = rank[b]??-1;
+  return ra >= rb ? a : b;
+}
+
+function semantic(stmts){
+  const symbolTable={}, checks=[], semErrors=[];
+
+  function evalNode(node){
+    if(!node) return null;
+    if(node.type==='Num') return node.value;
+    if(node.type==='StringLit') return null; // strings have no numeric value
+    if(node.type==='Var'){ const s=symbolTable[node.name]; return(s&&s.value!==undefined)?s.value:null; }
+    if(node.type==='BinOp'){
+      const l=evalNode(node.left),r=evalNode(node.right);
+      if(l===null||r===null) return null;
+      switch(node.op){case'+':return l+r;case'-':return l-r;case'*':return l*r;case'/':return r!==0?Math.trunc(l/r):NaN;}
+    }
+    return null;
+  }
+
+  function checkVars(node,line){
+    if(!node) return;
+    if(node.type==='Var'){
+      if(!symbolTable[node.name]){
+        semErrors.push({line,type:'TYPE_ERROR',msg:`Undeclared variable '${node.name}'`,hint:`'${node.name}' is used before being declared. Add 'int ${node.name} = …;' before line ${line}.`,src:node.name});
+        checks.push({icon:'err',text:`Line ${line}: <em>${esc(node.name)}</em> used but never declared`});
+      }
+    }
+    if(node.type==='BinOp'){checkVars(node.left,line);checkVars(node.right,line);}
+  }
+
+  for(const stmt of stmts){
+    if(stmt.type==='ErrorStmt') continue;
+    if(stmt.type==='Decl'){
+      if(symbolTable[stmt.name]){
+        semErrors.push({line:stmt.line,type:'TYPE_ERROR',msg:`Redeclaration of '${stmt.name}'`,hint:`'${stmt.name}' was already declared. Remove the duplicate 'int ${stmt.name}' on line ${stmt.line}.`,src:stmt.name});
+        checks.push({icon:'err',text:`Line ${stmt.line}: <em>${esc(stmt.name)}</em> redeclared`});
+      } else {
+        let val=undefined;
+        if(stmt.init){
+          checkVars(stmt.init, stmt.line);
+
+          // ── TYPE CHECKING (new) ──────────────────────────────────
+          const declaredType = stmt.varType;
+          const valueType    = inferType(stmt.init, symbolTable);
+
+          if(valueType === 'string' && declaredType !== 'char'){
+            // TYPE ERROR: assigning string to non-string variable
+            semErrors.push({
+              line: stmt.line, type:'TYPE_ERROR',
+              msg: `Type mismatch: cannot assign 'string' to '${declaredType}'`,
+              hint: `'${declaredType}' variables cannot hold string values. Use a char array or remove the string literal.`,
+              src: stmt.name
+            });
+            checks.push({icon:'err',text:`Line ${stmt.line}: <em>${esc(stmt.name)}</em> — type mismatch (<em>string</em> → <em>${esc(declaredType)}</em>)`});
+          } else if(declaredType === 'int' && valueType === 'float'){
+            // PRECISION LOSS: assigning float to int
+            const warnOrErr = isStrictMode() ? 'err' : 'warn';
+            semErrors.push({
+              line: stmt.line, type: isStrictMode() ? 'TYPE_ERROR' : 'WARNING',
+              msg: `Precision loss: float value assigned to 'int' (implicit truncation)`,
+              hint: `Declare '${stmt.name}' as 'float' to preserve the decimal, or explicitly truncate with (int).`,
+              src: stmt.name
+            });
+            checks.push({icon: warnOrErr, text:`Line ${stmt.line}: <em>${esc(stmt.name)}</em> — precision loss (<em>float</em> → <em>int</em>)`});
+          } else {
+            // Types are compatible — evaluate compile-time value
+            const ev=evalNode(stmt.init); if(ev!==null&&!isNaN(ev)) val=ev;
+          }
+          // ─────────────────────────────────────────────────────────
+        }
+        symbolTable[stmt.name]={type:stmt.varType,value:val,line:stmt.line};
+        if(!semErrors.some(e=>e.src===stmt.name&&e.line===stmt.line)){
+          checks.push({icon:'ok',text:`Line ${stmt.line}: declared <em>${esc(stmt.varType)} ${esc(stmt.name)}</em>${val!==undefined?' = '+val:''}`});
+        }
+      }
+    }
+    if(stmt.type==='Assign'){
+      if(!symbolTable[stmt.target]){
+        semErrors.push({line:stmt.line,type:'TYPE_ERROR',msg:`Assignment to undeclared variable '${stmt.target}'`,hint:`'${stmt.target}' was not declared. Add 'int ${stmt.target};' before line ${stmt.line}.`,src:stmt.target});
+        checks.push({icon:'err',text:`Line ${stmt.line}: <em>${esc(stmt.target)}</em> assigned but never declared`});
+      } else {
+        checkVars(stmt.expr,stmt.line);
+        const ev=evalNode(stmt.expr);
+        if(ev!==null&&!isNaN(ev)){
+          symbolTable[stmt.target].value=ev;
+          checks.push({icon:'ok',text:`Line ${stmt.line}: <em>${esc(stmt.target)}</em> = ${ev} (constant-folded at compile time)`});
+        } else {
+          checks.push({icon:'ok',text:`Line ${stmt.line}: <em>${esc(stmt.target)}</em> assigned (runtime value)`});
+        }
+      }
+    }
+  }
+  if(!checks.length) checks.push({icon:'info',text:'No valid statements to analyse.'});
+  return {symbolTable,checks,semErrors};
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE 4 — TAC GENERATION
+   Walks each statement's AST bottom-up, emitting t1 = a op b triples.
+   ═══════════════════════════════════════════════════════════════════ */
+function generateTAC(stmts){
+  let tmp=1;
+  const instrs=[];
+  function newT(){ return `t${tmp++}`; }
+
+  function gen(node,si){
+    if(node.type==='Num')  return String(node.value);
+    if(node.type==='StringLit') return `"${node.value}"`;
+    if(node.type==='Var')  return node.name;
+    if(node.type==='BinOp'){
+      const l=gen(node.left,si), r=gen(node.right,si), t=newT();
+      instrs.push({result:t,arg1:l,op:node.op,arg2:r,si});
+      return t;
+    }
+    return '?';
+  }
+
+  stmts.forEach((stmt,si)=>{
+    if(stmt.type==='ErrorStmt') return;
+    if(stmt.type==='Decl'&&stmt.init){
+      const r=gen(stmt.init,si);
+      instrs.push({result:stmt.name,arg1:r,op:null,arg2:null,si,cmt:'init'});
+    }
+    if(stmt.type==='Assign'){
+      const r=gen(stmt.expr,si);
+      instrs.push({result:stmt.target,arg1:r,op:null,arg2:null,si});
+    }
+  });
+  return instrs;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE 5 — OPTIMIZATION
+   Constant folding on AST, then re-generate TAC.
+   Dead copy removal: t = t.
+   ═══════════════════════════════════════════════════════════════════ */
+function optimize(stmts,rawInstrs){
+  const applied=[];
+
+  function fold(node){
+    if(!node||node.type==='Num'||node.type==='Var') return node;
+    if(node.type==='BinOp'){
+      const l=fold(node.left),r=fold(node.right);
+      if(l.type==='Num'&&r.type==='Num'){
+        let v;
+        switch(node.op){case'+':v=l.value+r.value;break;case'-':v=l.value-r.value;break;case'*':v=l.value*r.value;break;case'/':v=r.value!==0?Math.trunc(l.value/r.value):NaN;break;}
+        applied.push(`Constant fold: ${l.value} ${node.op} ${r.value} → ${v}`);
+        return {type:'Num',value:v};
+      }
+      return {...node,left:l,right:r};
+    }
+    return node;
+  }
+
+  const foldedStmts=stmts.map(s=>{
+    if(s.type==='Decl')   return {...s,init:fold(s.init)};
+    if(s.type==='Assign') return {...s,expr:fold(s.expr)};
+    return s;
+  });
+
+  let optInstrs=generateTAC(foldedStmts).filter(ins=>{
+    if(!ins.op&&ins.result===ins.arg1){ applied.push(`Dead copy removed: ${ins.result} = ${ins.arg1}`); return false; }
+    return true;
+  });
+
+  const saved=rawInstrs.length-optInstrs.length;
+  if(saved>0) applied.push(`${saved} instruction${saved>1?'s':''} eliminated`);
+  if(!applied.length) applied.push('No optimisations applicable — already optimal.');
+
+  return {optInstrs,foldedStmts,applied};
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PHASE 6 — TARGET CODE  (pseudo-assembly)
+   ═══════════════════════════════════════════════════════════════════ */
+function generateASM(optInstrs){
+  const lines=[];
+  const isN=s=>/^-?[\d.]+$/.test(s);
+  for(const ins of optInstrs){
+    if(ins.op){
+      lines.push({op:isN(ins.arg1)?'LOADI':'LOAD',arg:ins.arg1,si:ins.si});
+      const b={'+':'ADD','-':'SUB','*':'MUL','/':'DIV'}[ins.op];
+      lines.push({op:b+(isN(ins.arg2)?'I':''),arg:ins.arg2,si:ins.si});
+      lines.push({op:'STORE',arg:ins.result,si:ins.si});
+    } else {
+      if(ins.arg1!==ins.result){
+        lines.push({op:isN(ins.arg1)?'LOADI':'LOAD',arg:ins.arg1,si:ins.si});
+        lines.push({op:'STORE',arg:ins.result,si:ins.si});
+      }
+    }
+  }
+  return lines;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CONSTANT SCANNER
+   ═══════════════════════════════════════════════════════════════════ */
+function scanConstants(stmts){
+  const found=[];
+  function nStr(n){ if(!n)return''; if(n.type==='Num')return String(n.value); if(n.type==='Var')return n.name; if(n.type==='BinOp')return`(${nStr(n.left)} ${n.op} ${nStr(n.right)})`; return'?'; }
+  function ev(n){ if(!n)return null; if(n.type==='Num')return n.value; if(n.type==='Var')return null; if(n.type==='BinOp'){const l=ev(n.left),r=ev(n.right);if(l===null||r===null)return null;switch(n.op){case'+':return l+r;case'-':return l-r;case'*':return l*r;case'/':return r!==0?Math.trunc(l/r):NaN;}}return null; }
+  function walk(node,line){
+    if(!node||node.type==='Num'||node.type==='Var') return;
+    if(node.type==='BinOp'){
+      walk(node.left,line); walk(node.right,line);
+      const v=ev(node);
+      if(v!==null&&!isNaN(v)){const s=nStr(node);if(!found.some(f=>f.exprStr===s&&f.line===line))found.push({exprStr:s,value:v,line});}
+    }
+  }
+  stmts.forEach(s=>{
+    if(s.type==='Decl'&&s.init)  walk(s.init,s.line);
+    if(s.type==='Assign')         walk(s.expr,s.line);
+  });
+  return found;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   AST PRETTY-PRINTER
+   ═══════════════════════════════════════════════════════════════════ */
+function prettyAST(node,prefix,isLast){
+  if(prefix===undefined) prefix='';
+  if(isLast===undefined) isLast=true;
+  const conn  = isLast?'&#9492;&#9472;&#9472; ':'&#9500;&#9472;&#9472; ';
+  const child = prefix+(isLast?'&nbsp;&nbsp;&nbsp;&nbsp;':'&#9474;&nbsp;&nbsp;&nbsp;');
+  if(!node) return `${prefix}${conn}<span class="ast-err">[missing]</span>\n`;
+
+  if(node.type==='Decl'){
+    let h=`<span class="ast-node">${prefix}<span class="ast-kw">DECL</span> <span class="ast-type">${esc(node.varType)}</span> <span class="ast-id">${esc(node.name)}</span>\n</span>`;
+    if(node.init) h+=prettyAST(node.init,child,true);
+    return h;
+  }
+  if(node.type==='Assign'){
+    return `<span class="ast-node">${prefix}<span class="ast-assign">ASSIGN</span> &#8594; <span class="ast-id">${esc(node.target)}</span>\n</span>`+prettyAST(node.expr,child,true);
+  }
+  if(node.type==='BinOp'){
+    return `<span class="ast-node">${prefix}${conn}<span class="ast-op">BinOp(${esc(node.op)})</span>\n</span>`+prettyAST(node.left,child,false)+prettyAST(node.right,child,true);
+  }
+  if(node.type==='Num')      return `<span class="ast-node">${prefix}${conn}<span class="ast-num">Num(${node.value})</span>\n</span>`;
+  if(node.type==='StringLit')return `<span class="ast-node">${prefix}${conn}<span style="color:var(--cyan)">Str("${esc(node.value)}")</span>\n</span>`;
+  if(node.type==='Var')      return `<span class="ast-node">${prefix}${conn}<span class="ast-id">Var(${esc(node.name)})</span>\n</span>`;
+  if(node.type==='ErrorStmt')return `<span class="ast-node">${prefix}${conn}<span class="ast-err">&#9888; ERROR: ${esc(node.msg)}</span>\n</span>`;
+  return '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RENDER HELPERS
+   ═══════════════════════════════════════════════════════════════════ */
+function cOp(v){
+  const e=esc(v);
+  if(/^t\d+$/.test(v))      return `<span class="c-tmp">${e}</span>`;
+  if(/^-?[\d.]+$/.test(v))  return `<span class="c-num">${e}</span>`;
+  return `<span class="c-var">${e}</span>`;
+}
+
+function renderTAC(instrs,stmts){
+  if(!instrs.length) return '<div class="placeholder-msg" style="padding:6px 0">No instructions generated.</div>';
+  let h='<div class="code-block">',lastSi=-1;
+  instrs.forEach((ins,i)=>{
+    if(ins.si!==lastSi){
+      if(lastSi!==-1) h+='<div class="code-sep"></div>';
+      if(stmts){
+        const s=stmts[ins.si];
+        if(s){
+          const lbl=s.type==='Decl'?`decl ${s.varType} ${s.name}`:`assign ${s.target}`;
+          h+=`<div class="code-sep-label">&#9472; Line ${s.line}: ${esc(lbl)}</div>`;
+        }
+      }
+      lastSi=ins.si;
+    }
+    let t;
+    if(ins.op) t=`${cOp(ins.result)} <span class="c-op">=</span> ${cOp(ins.arg1)} <span class="c-op">${esc(ins.op)}</span> ${cOp(ins.arg2)}`;
+    else       t=`${cOp(ins.result)} <span class="c-op">=</span> ${cOp(ins.arg1)}`;
+    if(ins.cmt) t+=`  <span class="c-cmt">// ${esc(ins.cmt)}</span>`;
+    h+=`<div class="code-line"><span class="code-lnum">${i+1}</span><span class="code-text">${t}</span></div>`;
+  });
+  return h+'</div>';
+}
+
+function renderASMHtml(lines){
+  if(!lines.length) return '<div class="placeholder-msg" style="padding:6px 0">No instructions.</div>';
+  const kc={LOAD:'#4f8ef7',LOADI:'#4f8ef7',STORE:'#ff9a57',ADD:'#3dd68c',ADDI:'#3dd68c',SUB:'#3dd68c',SUBI:'#3dd68c',MUL:'#f5c542',MULI:'#f5c542',DIV:'#f76f72',DIVI:'#f76f72'};
+  let h='<div class="code-block">',lastSi=-1;
+  lines.forEach((l,i)=>{
+    if(l.si!==lastSi&&lastSi!==-1) h+='<div class="code-sep"></div>';
+    lastSi=l.si;
+    const col=kc[l.op]||'#c8d0e0';
+    const isN=/^-?[\d.]+$/.test(l.arg);
+    const aH=isN?`<span class="c-num">${esc(l.arg)}</span>`:`<span class="c-var">${esc(l.arg)}</span>`;
+    h+=`<div class="code-line"><span class="code-lnum">${i+1}</span><span class="code-text"><span style="color:${col};font-weight:700">${l.op}</span>&nbsp;&nbsp;${aH}</span></div>`;
+  });
+  return h+'</div>';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   UI
+   ═══════════════════════════════════════════════════════════════════ */
+function resetUI(){
+  for(let i=1;i<=6;i++){
+    document.getElementById('pl'+i).classList.remove('active','has-error');
+    const c=document.getElementById('card'+i);
+    c.classList.remove('visible','phase-disabled');
+    document.getElementById('body'+i).innerHTML='<div class="placeholder-msg">Awaiting input&hellip;</div>';
+  }
+  document.getElementById('errors-panel').classList.remove('show');
+  document.getElementById('errors-list').innerHTML='';
+  document.getElementById('const-scanner').classList.remove('visible');
+  document.getElementById('cs-body').innerHTML='<div class="placeholder-msg">Awaiting input&hellip;</div>';
+  document.getElementById('final-tac-card').classList.remove('visible');
+  document.getElementById('final-tac-body').innerHTML='<div class="placeholder-msg">Awaiting compilation&hellip;</div>';
+  document.getElementById('ptree-card').classList.remove('visible');
+  document.getElementById('ptree-body').innerHTML='<div class="placeholder-msg">Awaiting compilation&hellip;</div>';
+  document.getElementById('dag-card').classList.remove('visible');
+  document.getElementById('dag-body').innerHTML='<div class="placeholder-msg">Awaiting compilation&hellip;</div>';
+  // Reset termination banner
+  document.getElementById('termination-banner').classList.remove('show');
+}
+
+function showCard(n){ document.getElementById('card'+n).classList.add('visible'); }
+
+function pushErrors(errs,pipeId){
+  if(!errs.length) return;
+  const panel=document.getElementById('errors-panel');
+  const list =document.getElementById('errors-list');
+  const badge=document.getElementById('err-count');
+  // Accumulate
+  const prev=parseInt(badge.textContent)||0;
+  badge.textContent=prev+errs.length;
+  list.innerHTML+=errs.map(e=>{
+    const isWarn = e.type === 'WARNING';
+    return `
+    <div class="error-item${isWarn?' warn-item':''}">
+      <span class="err-line-badge">Line ${e.line}</span>
+      <div class="err-main">
+        <div class="err-msg">${isWarn?'&#9888;':'&#9888;'} ${isWarn?'[WARNING] ':''}${esc(e.msg)}</div>
+        ${e.hint?`<div class="err-hint">&#128161; ${esc(e.hint)}</div>`:''}
+        ${e.src ?`<div class="err-src">Near token: <span class="err-token">${esc(e.src)}</span></div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+  panel.classList.add('show');
+  document.getElementById('pl'+pipeId).classList.add('has-error');
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MAIN
+   ═══════════════════════════════════════════════════════════════════ */
+function compile(){
+  const src=document.getElementById('code-input').value;
+  resetUI();
+  if(!src.trim()) return;
+
+  /* ── Phase 1: LEXER ─────────────────────────────────────── */
+  const {tokens,errors:lexErr}=lexer(src);
+  if(lexErr.length) pushErrors(lexErr,1);
+  document.getElementById('pl1').classList.add('active');
+
+  const filtered=tokens.filter(t=>t.type!==TT.EOF);
+  const rows=filtered.map((t,i)=>
+    `<tr><td class="tok-line">${t.line}</td><td class="tok-value">${esc(t.value)}</td><td><span class="tok-type tt-${t.type}">${t.type}</span></td></tr>`
+  ).join('');
+  const maxLine=filtered.reduce((m,t)=>Math.max(m,t.line),1);
+
+  // Build token category groups for the second table
+  const {groups, ORDER} = buildTokenGroups(tokens);
+  const catRows = ORDER.filter(k => groups[k].values.length > 0).map(k => {
+    const g = groups[k];
+    const vals = g.values.map(v=>`<span class="tok-type tt-${k}" style="margin:1px 1px;display:inline-block">${esc(v)}</span>`).join(' ');
+    const lines = [...g.lines].sort((a,b)=>a-b).join(', ');
+    return `<tr><td><span class="tok-type tt-${k}">${k}</span></td><td class="cat-values">${vals}</td><td class="cat-lines">${lines}</td></tr>`;
+  }).join('');
+
+  document.getElementById('body1').innerHTML=`
+    <div class="lexer-tables-wrap">
+      <div class="token-table-col">
+        <div class="token-cat-label">Token Stream</div>
+        <table class="token-table">
+          <thead><tr><th>Line</th><th>Lexeme</th><th>Type</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+      <div class="token-table-col">
+        <div class="token-cat-label">&#x25B6; Token Category Table</div>
+        <table class="cat-table">
+          <thead><tr><th>Type</th><th>Values</th><th>Lines</th></tr></thead>
+          <tbody>${catRows}</tbody>
+        </table>
+      </div>
+    </div>
+    <div class="token-count">Tokens: <strong>${filtered.length}</strong> &nbsp;&middot;&nbsp; Lines: <strong>${maxLine}</strong></div>`;
+  showCard(1);
+
+  /* ── Phase 2: PARSER ────────────────────────────────────── */
+  const {stmts,errors:parseErr}=parser(tokens);
+  if(parseErr.length) pushErrors(parseErr,2);
+  document.getElementById('pl2').classList.add('active');
+
+  const treeHtml=stmts.length ? stmts.map((stmt,i)=>{
+    const lbl = stmt.type==='ErrorStmt'
+      ? `<span style="color:var(--red)">&#9888; Error Statement</span>`
+      : stmt.type==='Decl'
+        ? `<span class="ast-kw">${esc(stmt.varType)}</span> <span class="ast-id">${esc(stmt.name)}</span>`
+        : `<span class="ast-id">${esc(stmt.target)}</span> <span style="color:var(--orange)">=</span> &hellip;`;
+    return `<div class="stmt-block">
+      <div class="stmt-block-label">Stmt ${i+1} &middot; Line ${stmt.line} &middot; ${esc(stmt.type)} &nbsp; ${lbl}</div>
+      <div class="ast-tree">${prettyAST(stmt)}</div>
+    </div>`;
+  }).join('') : '<div class="placeholder-msg">No statements parsed.</div>';
+  document.getElementById('body2').innerHTML=treeHtml;
+  showCard(2);
+
+  const validStmts=stmts.filter(s=>s.type!=='ErrorStmt');
+
+  /* ── Constant Scanner (pre-phase, after parse) ──────────── */
+  const constFound=scanConstants(validStmts);
+  const csBody=document.getElementById('cs-body');
+  if(!constFound.length){
+    csBody.innerHTML=`<div style="display:flex;gap:10px;align-items:center;font-size:11px;color:var(--text-dim)"><span style="font-size:16px">&#x2205;</span><span>No constant sub-expressions found &mdash; all operands involve variables at runtime.</span></div>`;
+  } else {
+    const pills=constFound.map(f=>`
+      <div class="ce-pill">
+        <span class="ce-pill-expr">${esc(f.exprStr)}</span>
+        <span class="ce-pill-arrow">&#x2192;</span>
+        <span class="ce-pill-val">${f.value}</span>
+        <span class="ce-pill-line">line&nbsp;${f.line}</span>
+      </div>`).join('');
+    csBody.innerHTML=`<div style="font-size:10px;color:var(--text-dim);margin-bottom:8px">${constFound.length} constant expression${constFound.length>1?'s':''} detected:</div><div class="ce-pill-row">${pills}</div>`;
+  }
+  document.getElementById('const-scanner').classList.add('visible');
+
+  /* ── Phase 3: SEMANTIC ──────────────────────────────────── */
+  const {symbolTable,checks,semErrors}=semantic(stmts);
+  if(semErrors.length) pushErrors(semErrors,3);
+  document.getElementById('pl3').classList.add('active');
+
+  const symRows=Object.entries(symbolTable).map(([nm,info])=>
+    `<tr>
+      <td style="color:var(--text-bright);font-weight:600">${esc(nm)}</td>
+      <td><span class="sym-type-badge stype-${info.type}">${esc(info.type)}</span></td>
+      <td>${info.value!==undefined?`<span class="sym-val">${info.value}</span>`:'<span class="sym-undef">runtime</span>'}</td>
+      <td style="color:var(--text-dim)">${info.line}</td>
+    </tr>`
+  ).join('');
+
+  const checksHtml=checks.map(c=>`
+    <div class="sem-check">
+      <div class="sem-icon sem-${c.icon==='err'?'err':c.icon==='warn'?'warn':c.icon==='info'?'info':'ok'}">${c.icon==='err'?'&#x2715;':c.icon==='warn'?'!':c.icon==='info'?'i':'&#10003;'}</div>
+      <div class="sem-text">${c.text}</div>
+    </div>`).join('');
+
+  document.getElementById('body3').innerHTML=
+    (symRows?`<table class="sym-table"><thead><tr><th>Name</th><th>Type</th><th>Value</th><th>Decl. Line</th></tr></thead><tbody>${symRows}</tbody></table>`:'')
+    +checksHtml;
+  showCard(3);
+
+  /* ── STRICT MODE FLOW CONTROL ───────────────────────────────────
+     Real compilers stop code generation after semantic errors.
+     In STRICT MODE: if there are fatal semantic errors (TYPE_ERROR),
+     we halt here — phases 4, 5, 6 are skipped and greyed out.
+     In LENIENT MODE: continue with a warning note.
+     ────────────────────────────────────────────────────────────── */
+  const fatalErrors = semErrors.filter(e => e.type === 'TYPE_ERROR');
+  const STRICT = isStrictMode();
+
+  if(fatalErrors.length > 0 && STRICT){
+    // Show termination banner
+    document.getElementById('termination-banner').classList.add('show');
+    // Grey out phases 4, 5, 6
+    [4,5,6].forEach(n=>{
+      const card = document.getElementById('card'+n);
+      card.classList.add('visible','phase-disabled');
+      document.getElementById('body'+n).innerHTML=
+        `<div class="placeholder-msg" style="color:var(--red);opacity:.7">&#x26D4; Skipped — semantic errors must be resolved first.</div>`;
+    });
+    // Show skipped message in final TAC and DAG
+    ['final-tac-body','ptree-body','dag-body'].forEach(id=>{
+      document.getElementById(id).innerHTML=
+        `<div class="placeholder-msg" style="color:var(--red);opacity:.7">&#x26D4; Not generated — compilation terminated after Phase 3.</div>`;
+    });
+    setTimeout(()=>{
+      document.getElementById('final-tac-card').classList.add('visible');
+      document.getElementById('ptree-card').classList.add('visible');
+      document.getElementById('dag-card').classList.add('visible');
+    },300);
+    return; // STOP — do not run phases 4, 5, 6
+  }
+
+  // LENIENT MODE with warnings: add a note to the semantic panel
+  if(fatalErrors.length > 0 && !STRICT){
+    document.getElementById('body3').innerHTML +=
+      `<div style="margin-top:12px;padding:9px 13px;border-radius:7px;background:rgba(245,197,66,0.07);border:1px solid rgba(245,197,66,0.3);font-size:10px;color:var(--yellow)">
+        &#9888; Lenient mode: compilation continues despite type errors. Invalid nodes may produce incorrect output.
+      </div>`;
+  }
+
+  /* ── Phase 4: TAC ───────────────────────────────────────── */
+  const rawInstrs=generateTAC(validStmts);
+  document.getElementById('pl4').classList.add('active');
+  document.getElementById('body4').innerHTML=renderTAC(rawInstrs,validStmts);
+  showCard(4);
+
+  /* ── Phase 5: OPTIMIZATION ──────────────────────────────── */
+  const {optInstrs,foldedStmts,applied}=optimize(validStmts,rawInstrs);
+  document.getElementById('pl5').classList.add('active');
+
+  const appliedHtml=applied.map(a=>
+    `<div class="sem-check"><div class="sem-icon sem-info">&#9889;</div><div class="sem-text"><em>${esc(a)}</em></div></div>`
+  ).join('');
+  document.getElementById('body5').innerHTML=appliedHtml+renderTAC(optInstrs,foldedStmts);
+  showCard(5);
+
+  /* ── Phase 6: TARGET CODE ───────────────────────────────── */
+  const asmLines=generateASM(optInstrs);
+  document.getElementById('pl6').classList.add('active');
+  document.getElementById('body6').innerHTML=renderASMHtml(asmLines)+`
+    <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:9px;font-size:9px;color:var(--text-dim)">
+      <span><span style="color:#4f8ef7">LOAD/LOADI</span> load to ACC</span>
+      <span><span style="color:#3dd68c">ADD/SUB</span> arithmetic</span>
+      <span><span style="color:#f5c542">MUL</span> multiply</span>
+      <span><span style="color:#f76f72">DIV</span> divide</span>
+      <span><span style="color:#ff9a57">STORE</span> write result</span>
+    </div>`;
+  showCard(6);
+
+  /* ── FINAL TAC SUMMARY ──────────────────────────────────── */
+  const saved=rawInstrs.length-optInstrs.length;
+  const saveBadge=saved>0
+    ?`<span style="font-size:10px;padding:3px 10px;border-radius:6px;background:rgba(61,214,140,.1);color:var(--green)">&#8722;${saved} instruction${saved>1?'s':''} saved</span>`
+    :`<span style="font-size:10px;padding:3px 10px;border-radius:6px;background:rgba(79,142,247,.1);color:var(--accent)">Already optimal</span>`;
+
+  // Which raw temp results got folded away
+  const rawTemps=new Set(rawInstrs.filter(i=>i.op).map(i=>i.result));
+  const optTemps=new Set(optInstrs.filter(i=>i.op).map(i=>i.result));
+  const foldedSet=new Set([...rawTemps].filter(r=>!optTemps.has(r)));
+
+  function renderColFinal(instrs,stmts_,markFolded){
+    if(!instrs.length) return '<div class="placeholder-msg" style="padding:4px 0">None</div>';
+    let h='<div class="code-block">',lastSi=-1;
+    instrs.forEach((ins,i)=>{
+      if(ins.si!==lastSi){
+        if(lastSi!==-1) h+='<div class="code-sep"></div>';
+        if(stmts_){
+          const s=stmts_[ins.si];
+          if(s){const lbl=s.type==='Decl'?`decl ${s.varType} ${s.name}`:`assign ${s.target}`;h+=`<div class="code-sep-label">&#9472; Line ${s.line}: ${esc(lbl)}</div>`;}
+        }
+        lastSi=ins.si;
+      }
+      const wf=markFolded&&ins.op&&foldedSet.has(ins.result);
+      let t;
+      if(ins.op) t=`${cOp(ins.result)} <span class="c-op">=</span> ${cOp(ins.arg1)} <span class="c-op">${esc(ins.op)}</span> ${cOp(ins.arg2)}`;
+      else       t=`${cOp(ins.result)} <span class="c-op">=</span> ${cOp(ins.arg1)}`;
+      const fo=wf?' style="opacity:.38;text-decoration:line-through"':'';
+      const fb=wf?`<span style="margin-left:8px;font-size:9px;padding:1px 5px;border-radius:4px;background:rgba(255,154,87,.15);color:var(--orange)">FOLDED</span>`:'';
+      h+=`<div class="code-line"${fo}><span class="code-lnum">${i+1}</span><span class="code-text">${t}</span>${fb}</div>`;
+    });
+    return h+'</div>';
+  }
+
+  document.getElementById('final-tac-body').innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+      <div style="font-size:11px;color:var(--text-dim)">${validStmts.length} statement${validStmts.length!==1?'s':''} compiled</div>
+      ${saveBadge}
+    </div>
+    <div class="tac-columns">
+      <div><div class="tac-col-label raw">&#x25CF; Raw TAC &mdash; ${rawInstrs.length} instr.</div>${renderColFinal(rawInstrs,validStmts,false)}</div>
+      <div><div class="tac-col-label opt">&#x25CF; Optimised TAC &mdash; ${optInstrs.length} instr.</div>${renderColFinal(optInstrs,foldedStmts,true)}</div>
+    </div>
+    <div class="tac-legend">
+      <span><span class="ldot" style="background:var(--orange)"></span>t1,t2&hellip; temporaries</span>
+      <span><span class="ldot" style="background:var(--accent)"></span>named variables</span>
+      <span><span class="ldot" style="background:var(--green)"></span>numeric constants</span>
+      <span><span class="ldot" style="background:var(--yellow)"></span>operators</span>
+    </div>`;
+  setTimeout(()=>document.getElementById('final-tac-card').classList.add('visible'),380);
+
+  /* ── PARSE TREE VISUAL (single unified tree) ────────────────── */
+  {
+    const ptBody = document.getElementById('ptree-body');
+    if(!stmts.length){
+      ptBody.innerHTML='<div class="placeholder-msg">No statements to visualise.</div>';
+    } else {
+      const hasErr = stmts.some(s=>s.type==='ErrorStmt');
+      const layout = buildUnifiedParseTreeLayout(stmts);
+      const svgStr = renderParseTreeSVG(layout, hasErr);
+      const stmtCount = stmts.length;
+      const errCount  = stmts.filter(s=>s.type==='ErrorStmt').length;
+      ptBody.innerHTML = `
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap">
+          <span style="font-size:10px;color:var(--text-dim)">${stmtCount} statement${stmtCount!==1?'s':''} &nbsp;&middot;&nbsp; <span style="color:var(--purple)">${layout.nodes.length} nodes</span></span>
+          ${errCount?`<span style="font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(247,111,114,.1);color:var(--red)">${errCount} parse error${errCount>1?'s':''}</span>`:''}
+        </div>
+        <div class="ptree-svg-wrap">${svgStr}</div>`;
+      if(hasErr){
+        ptBody.innerHTML += `<div class="ptree-err-note"><span class="pte-icon">&#9888;</span>
+          <span><strong>Parse error(s) detected:</strong> Error nodes are shown in red. The tree shows the partial structure built before each error was encountered.</span>
+        </div>`;
+      }
+      ptBody.innerHTML += `<div style="display:flex;flex-wrap:wrap;gap:14px;font-size:10px;color:var(--text-dim);margin-top:12px">
+        <span><svg width="12" height="12"><ellipse cx="6" cy="6" rx="5" ry="5" fill="rgba(56,212,212,.1)" stroke="#38d4d4" stroke-width="1.5"/></svg> Program Root</span>
+        <span><svg width="12" height="12"><ellipse cx="6" cy="6" rx="5" ry="5" fill="rgba(184,127,255,.1)" stroke="#b87fff" stroke-width="1.5"/></svg> Statement Root</span>
+        <span><svg width="12" height="12"><ellipse cx="6" cy="6" rx="5" ry="5" fill="rgba(245,197,66,.1)" stroke="#f5c542" stroke-width="1.5"/></svg> Operator</span>
+        <span><svg width="12" height="12"><ellipse cx="6" cy="6" rx="5" ry="5" fill="rgba(79,142,247,.1)" stroke="#4f8ef7" stroke-width="1.5"/></svg> Identifier</span>
+        <span><svg width="12" height="12"><ellipse cx="6" cy="6" rx="5" ry="5" fill="rgba(61,214,140,.1)" stroke="#3dd68c" stroke-width="1.5"/></svg> Number</span>
+        <span><svg width="12" height="12"><ellipse cx="6" cy="6" rx="5" ry="5" fill="rgba(247,111,114,.1)" stroke="#f76f72" stroke-width="1.5"/></svg> Error node</span>
+      </div>`;
+    }
+    setTimeout(()=>document.getElementById('ptree-card').classList.add('visible'),420);
+  }
+
+  /* ── DAG ────────────────────────────────────────────────────── */
+  {
+    const dagBody = document.getElementById('dag-body');
+    if(!validStmts.length){
+      dagBody.innerHTML='<div class="placeholder-msg">No valid statements — DAG not generated.</div>';
+    } else {
+      // Build DAG from optimized/folded statements for maximum reduction
+      const {pool, roots} = buildDAG(foldedStmts);
+      const layout = layoutDAG(pool, roots);
+      const svgStr = renderDAGSVG(layout);
+      const nodeArr=[...pool.values()];
+      const sharedCount=nodeArr.filter(n=>nodeArr.some(other=>other.id!==n.id&&other.children.includes(n.id))).length;
+      const savedNodes = validStmts.reduce((acc,s)=>{
+        function countNodes(n){ if(!n) return 0; if(n.type==='Num'||n.type==='Var') return 1; if(n.type==='BinOp') return 1+countNodes(n.left)+countNodes(n.right); return 0; }
+        if(s.type==='Decl'&&s.init) return acc+countNodes(s.init);
+        if(s.type==='Assign') return acc+countNodes(s.expr);
+        return acc;
+      },validStmts.length) - nodeArr.length;
+      dagBody.innerHTML=`
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;flex-wrap:wrap">
+          <span style="font-size:10px;color:var(--text-dim)"><span style="color:var(--text-bright);font-weight:600">${nodeArr.length}</span> nodes &nbsp;&middot;&nbsp; <span style="color:var(--text-bright);font-weight:600">${layout.edges.length}</span> edges</span>
+          ${sharedCount?`<span style="font-size:10px;padding:2px 9px;border-radius:4px;background:rgba(56,212,212,.1);color:var(--cyan)">&#9830; ${sharedCount} shared subexpression${sharedCount!==1?'s':''}</span>`:''}
+          ${savedNodes>0?`<span style="font-size:10px;padding:2px 9px;border-radius:4px;background:rgba(61,214,140,.1);color:var(--green)">&#8722;${savedNodes} node${savedNodes!==1?'s':''} eliminated</span>`:'<span style="font-size:10px;padding:2px 9px;border-radius:4px;background:rgba(79,142,247,.1);color:var(--accent)">No redundancy</span>'}
+        </div>
+        <div class="dag-svg-wrap">${svgStr}</div>
+        <div class="dag-legend">
+          <span><span class="dl-dot" style="background:#b87fff"></span>Root/Assignment</span>
+          <span><span class="dl-dot" style="background:#f5c542"></span>Operator</span>
+          <span><span class="dl-dot" style="background:#38d4d4;border:2px solid #38d4d4;box-shadow:0 0 6px rgba(56,212,212,.5)"></span>Shared subexpr (teal glow)</span>
+          <span><span class="dl-dot" style="background:#4f8ef7"></span>Identifier</span>
+          <span><span class="dl-dot" style="background:#3dd68c"></span>Number</span>
+        </div>`;
+    }
+    setTimeout(()=>document.getElementById('dag-card').classList.add('visible'),480);
+  }
+} // end compile()
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   PARSE TREE VISUAL RENDERER
+   Lays out a parse tree as SVG with ellipse nodes and arrow edges,
+   exactly like the reference image (oval nodes, arrows, operator labels).
+   Works for both valid and error (partial) parse trees.
+   ═══════════════════════════════════════════════════════════════════ */
+
+function buildUnifiedParseTreeLayout(stmts){
+  // Build a single tree: Program root → each statement as a child subtree
+  function toTree(node){
+    if(!node) return {label:'?', children:[], isError:true};
+    if(node.type==='Decl'){
+      const ch=[{label:node.varType, children:[], isLeaf:true, isKw:true},{label:node.name, children:[], isLeaf:true, isId:true}];
+      if(node.init) ch.push(toTree(node.init));
+      return {label:'DECL', children:ch, isRoot:true};
+    }
+    if(node.type==='Assign'){
+      return {label:'=', children:[{label:node.target, children:[], isLeaf:true, isId:true}, toTree(node.expr)], isRoot:true, isOp:true};
+    }
+    if(node.type==='BinOp'){
+      return {label:node.op, children:[toTree(node.left), toTree(node.right)], isOp:true};
+    }
+    if(node.type==='Num') return {label:String(node.value), children:[], isLeaf:true, isNum:true};
+    if(node.type==='Var') return {label:node.name, children:[], isLeaf:true, isId:true};
+    if(node.type==='ErrorStmt') return {label:'ERR', children:[{label:(node.msg||'').substring(0,16)+'…', children:[], isError:true}], isError:true};
+    return {label:'?', children:[], isError:true};
+  }
+
+  // Create unified root
+  const programRoot = {label:'PROGRAM', children: stmts.map(s=>toTree(s)), isProgram:true};
+
+  const NODE_W = 62, NODE_H = 36, H_GAP = 20, V_GAP = 65;
+
+  function measure(n){
+    if(!n.children.length){ n.w = NODE_W; return; }
+    n.children.forEach(measure);
+    const totalW = n.children.reduce((s,c)=>s+c.w,0) + H_GAP*(n.children.length-1);
+    n.w = Math.max(NODE_W, totalW);
+  }
+
+  function place(n, x, y){
+    n.x = x + n.w/2;
+    n.y = y;
+    let cx = x;
+    n.children.forEach(c=>{ place(c, cx, y+V_GAP); cx += c.w+H_GAP; });
+  }
+
+  function allNodes(n, arr=[]){ arr.push(n); n.children.forEach(c=>allNodes(c,arr)); return arr; }
+
+  measure(programRoot);
+  place(programRoot, 0, 0);
+  const nodes = allNodes(programRoot);
+
+  const minX = Math.min(...nodes.map(n=>n.x-NODE_W/2));
+  const maxX = Math.max(...nodes.map(n=>n.x+NODE_W/2));
+  const maxY = Math.max(...nodes.map(n=>n.y));
+  const W = maxX - minX + 40;
+  const H = maxY + NODE_H + 40;
+  const OX = -minX + 20;
+  const OY = NODE_H/2 + 14;
+
+  function edges(n, arr=[]){
+    n.children.forEach(c=>{ arr.push({x1:n.x+OX, y1:n.y+OY, x2:c.x+OX, y2:c.y+OY}); edges(c,arr); });
+    return arr;
+  }
+
+  return {nodes, edges:edges(programRoot), W:Math.max(W,200), H:Math.max(H,100), OX, OY, NODE_W, NODE_H};
+}
+
+function buildParseTreeLayout(stmtNode){
+  // Convert an AST stmt node into a tree of display nodes
+  // Returns {label, children, isError, isOp, isLeaf}
+  function toTree(node){
+    if(!node) return {label:'?', children:[], isError:true};
+    if(node.type==='Decl'){
+      const ch=[{label:node.varType, children:[], isLeaf:true, isKw:true},{label:node.name, children:[], isLeaf:true, isId:true}];
+      if(node.init) ch.push(toTree(node.init));
+      return {label:'DECL', children:ch, isRoot:true};
+    }
+    if(node.type==='Assign'){
+      return {label:'=', children:[{label:node.target, children:[], isLeaf:true, isId:true}, toTree(node.expr)], isRoot:true, isOp:true};
+    }
+    if(node.type==='BinOp'){
+      return {label:node.op, children:[toTree(node.left), toTree(node.right)], isOp:true};
+    }
+    if(node.type==='Num') return {label:String(node.value), children:[], isLeaf:true, isNum:true};
+    if(node.type==='Var') return {label:node.name, children:[], isLeaf:true, isId:true};
+    if(node.type==='ErrorStmt') return {label:'ERROR', children:[{label:node.msg.substring(0,22)+'…', children:[], isError:true}], isError:true};
+    return {label:'?', children:[], isError:true};
+  }
+
+  // Layout: assign x,y to each node via post-order
+  const NODE_W = 56, NODE_H = 34, H_GAP = 18, V_GAP = 60;
+
+  function measure(n){
+    if(!n.children.length){ n.w=NODE_W; return; }
+    n.children.forEach(measure);
+    const totalW = n.children.reduce((s,c)=>s+c.w,0) + H_GAP*(n.children.length-1);
+    n.w = Math.max(NODE_W, totalW);
+  }
+
+  function place(n, x, y){
+    n.x = x + n.w/2;
+    n.y = y;
+    let cx = x;
+    n.children.forEach(c=>{ place(c, cx, y+V_GAP); cx += c.w+H_GAP; });
+  }
+
+  function allNodes(n, arr=[]){ arr.push(n); n.children.forEach(c=>allNodes(c,arr)); return arr; }
+
+  const root = toTree(stmtNode);
+  measure(root);
+  place(root, 0, 0);
+  const nodes = allNodes(root);
+
+  // Bounding box
+  const minX = Math.min(...nodes.map(n=>n.x-NODE_W/2));
+  const maxX = Math.max(...nodes.map(n=>n.x+NODE_W/2));
+  const maxY = Math.max(...nodes.map(n=>n.y));
+  const W = maxX - minX + 30;
+  const H = maxY + NODE_H + 30;
+  const OX = -minX + 15;
+  const OY = NODE_H/2 + 10;
+
+  // Build edges
+  function edges(n, arr=[]){
+    n.children.forEach(c=>{ arr.push({x1:n.x+OX, y1:n.y+OY, x2:c.x+OX, y2:c.y+OY}); edges(c,arr); });
+    return arr;
+  }
+
+  return {nodes, edges:edges(root), W:Math.max(W,120), H:Math.max(H,80), OX, OY, NODE_W, NODE_H};
+}
+
+function renderParseTreeSVG(layout, isError){
+  const {nodes, edges, W, H, OX, OY, NODE_W, NODE_H} = layout;
+  const rx = NODE_W/2, ry = NODE_H/2;
+
+  const edgeSVG = edges.map(e=>{
+    const x1=e.x1, y1=e.y1+ry, x2=e.x2, y2=e.y2-ry;
+    const mx=(x1+x2)/2, my=(y1+y2)/2;
+    return `<path d="M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}" fill="none" stroke="#2a3040" stroke-width="1.5" marker-end="url(#arrowhead)"/>`;
+  }).join('');
+
+  const nodeSVG = nodes.map(n=>{
+    const cx=n.x+OX, cy=n.y+OY;
+    let fill='#111318', stroke='#2a3040', textCol='#c8d0e0', glowColor='none', strokeW=1.5;
+    if(n.isProgram){ stroke='#38d4d4'; fill='rgba(56,212,212,0.1)'; textCol='#38d4d4'; strokeW=2; glowColor='rgba(56,212,212,0.3)'; }
+    else if(n.isRoot){ stroke='#b87fff'; fill='rgba(184,127,255,0.08)'; textCol='#b87fff'; strokeW=2; }
+    else if(n.isOp)  { stroke='#f5c542'; fill='rgba(245,197,66,0.08)'; textCol='#f5c542'; }
+    else if(n.isNum) { stroke='#3dd68c'; fill='rgba(61,214,140,0.08)'; textCol='#3dd68c'; }
+    else if(n.isId)  { stroke='#4f8ef7'; fill='rgba(79,142,247,0.08)'; textCol='#4f8ef7'; }
+    else if(n.isKw)  { stroke='#f76f72'; fill='rgba(247,111,114,0.08)'; textCol='#f76f72'; }
+    else if(n.isError){ stroke='#f76f72'; fill='rgba(247,111,114,0.06)'; textCol='#f76f72'; }
+    const lbl = n.label.length>9 ? n.label.substring(0,8)+'…' : n.label;
+    const glow = (glowColor!=='none')
+      ? `<ellipse cx="${cx}" cy="${cy}" rx="${rx+5}" ry="${ry+5}" fill="${glowColor}" stroke="none" opacity="0.5"/>`
+      : '';
+    return `${glow}<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeW}"/>
+      <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="${textCol}" font-weight="600">${escSVG(lbl)}</text>`;
+  }).join('');
+
+  return `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;display:block;margin:0 auto">
+    <defs>
+      <marker id="arrowhead" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+        <polygon points="0 0, 7 3.5, 0 7" fill="#3a4055"/>
+      </marker>
+    </defs>
+    ${edgeSVG}
+    ${nodeSVG}
+  </svg>`;
+}
+
+function escSVG(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   DAG (Directed Acyclic Graph) BUILDER + RENDERER
+   Merges identical sub-expressions into shared nodes.
+   ═══════════════════════════════════════════════════════════════════ */
+
+function buildDAG(stmts){
+  // Node pool: key → {id, label, type, children:[ids]}
+  const pool = new Map(); // key → node
+  let idSeq = 0;
+
+  function key(node){
+    if(node.type==='Num') return `N:${node.value}`;
+    if(node.type==='Var') return `V:${node.name}`;
+    if(node.type==='BinOp'){
+      const lk=key(node.left), rk=key(node.right);
+      return `B:${node.op}(${lk},${rk})`;
+    }
+    return 'ERR';
+  }
+
+  function intern(node){
+    const k = key(node);
+    if(pool.has(k)) return pool.get(k).id;
+    const id = idSeq++;
+    let label, ntype, children=[];
+    if(node.type==='Num'){ label=String(node.value); ntype='num'; }
+    else if(node.type==='Var'){ label=node.name; ntype='id'; }
+    else if(node.type==='BinOp'){
+      label=node.op; ntype='op';
+      children=[intern(node.left), intern(node.right)];
+    } else { label='?'; ntype='err'; }
+    pool.set(k,{id,label,ntype,children,k});
+    return id;
+  }
+
+  // Collect all roots
+  const roots=[];
+  stmts.forEach(s=>{
+    if(s.type==='ErrorStmt') return;
+    let exprNode=null, rootLabel='';
+    if(s.type==='Decl'&&s.init){ exprNode=s.init; rootLabel=`${s.varType} ${s.name}`; }
+    if(s.type==='Assign'){ exprNode=s.expr; rootLabel=`${s.target} =`; }
+    if(exprNode){
+      const exprId=intern(exprNode);
+      // Create an assign root node
+      const rid=idSeq++;
+      pool.set(`ROOT:${rid}`,{id:rid,label:rootLabel,ntype:'root',children:[exprId]});
+      roots.push(rid);
+    }
+  });
+
+  return {pool, roots};
+}
+
+function layoutDAG(pool, roots){
+  const nodes=[...pool.values()];
+  const byId=new Map(nodes.map(n=>[n.id,n]));
+
+  // Compute depth via reverse BFS (deepest shared nodes go deep)
+  const depth=new Map();
+  roots.forEach(r=>depth.set(r,0));
+  const queue=[...roots];
+  const visited=new Set();
+  let qi=0;
+  while(qi<queue.length){
+    const id=queue[qi++];
+    if(visited.has(id)) continue;
+    visited.add(id);
+    const n=byId.get(id); if(!n) continue;
+    n.children.forEach(cid=>{
+      const cd=(depth.get(id)||0)+1;
+      if(!depth.has(cid)||depth.get(cid)<cd) depth.set(cid,cd);
+      queue.push(cid);
+    });
+  }
+
+  // Group by depth layer
+  const layers=new Map();
+  nodes.forEach(n=>{
+    const d=depth.has(n.id)?depth.get(n.id):0;
+    if(!layers.has(d)) layers.set(d,[]);
+    layers.get(d).push(n);
+  });
+
+  const NODE_W=70, NODE_H=38, H_GAP=32, V_GAP=80;
+
+  // Position nodes per layer, centered
+  layers.forEach((lnodes,d)=>{
+    const totalW=lnodes.length*NODE_W+(lnodes.length-1)*H_GAP;
+    lnodes.forEach((n,i)=>{
+      n.x = i*(NODE_W+H_GAP) - totalW/2 + NODE_W/2;
+      n.y = d*V_GAP;
+    });
+  });
+
+  const allX=nodes.map(n=>n.x); const allY=nodes.map(n=>n.y);
+  const minX=Math.min(...allX)-NODE_W/2, maxX=Math.max(...allX)+NODE_W/2;
+  const minY=Math.min(...allY)-NODE_H/2, maxY=Math.max(...allY)+NODE_H/2;
+  const W=maxX-minX+60, H=maxY-minY+60;
+  const OX=-minX+30, OY=-minY+30;
+
+  // Count in-degree for shared detection
+  const inDegree=new Map(nodes.map(n=>[n.id,0]));
+  nodes.forEach(n=>n.children.forEach(cid=>inDegree.set(cid,(inDegree.get(cid)||0)+1)));
+
+  const edges=[];
+  nodes.forEach(n=>{
+    n.children.forEach(cid=>{
+      const c=byId.get(cid); if(!c) return;
+      const shared=(inDegree.get(cid)||0)>1;
+      edges.push({x1:n.x+OX, y1:n.y+OY, x2:c.x+OX, y2:c.y+OY, shared});
+    });
+  });
+
+  // Mark shared nodes
+  nodes.forEach(n=>{ n.shared=(inDegree.get(n.id)||0)>1; });
+
+  return {nodes, edges, W:Math.max(W,200), H:Math.max(H,100), OX, OY, NODE_W, NODE_H, byId, inDegree};
+}
+
+function renderDAGSVG(layout){
+  const {nodes, edges, W, H, OX, OY, NODE_W, NODE_H} = layout;
+  const rx=NODE_W/2, ry=NODE_H/2;
+
+  // Draw edges with bezier curves
+  const edgeSVG=edges.map(e=>{
+    const x1=e.x1, y1=e.y1+ry, x2=e.x2, y2=e.y2-ry;
+    const my=(y1+y2)/2;
+    const col=e.shared?'#38d4d4':'#2e3648';
+    const sw=e.shared?2.2:1.5;
+    const markId=e.shared?'url(#dagArrowShared)':'url(#dagArrowNorm)';
+    const dash=e.shared?'':'';
+    const opacity=e.shared?1:0.7;
+    return `<path d="M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}" fill="none" stroke="${col}" stroke-width="${sw}" stroke-opacity="${opacity}" marker-end="${markId}" ${dash?`stroke-dasharray="${dash}"`:''} />`;
+  }).join('');
+
+  const nodeSVG=nodes.map(n=>{
+    const cx=n.x+OX, cy=n.y+OY;
+    let fill='#111318', stroke='#2a3040', textCol='#c8d0e0', strokeW=1.5;
+    let glowSvg='';
+
+    if(n.ntype==='root')   { stroke='#b87fff'; fill='rgba(184,127,255,0.12)'; textCol='#b87fff'; strokeW=2; }
+    else if(n.ntype==='op'){
+      if(n.shared){ stroke='#38d4d4'; fill='rgba(56,212,212,0.13)'; textCol='#38d4d4'; strokeW=2.5;
+        glowSvg=`<ellipse cx="${cx}" cy="${cy}" rx="${rx+7}" ry="${ry+7}" fill="rgba(56,212,212,0.12)" stroke="none"/>`;
+      } else { stroke='#f5c542'; fill='rgba(245,197,66,0.10)'; textCol='#f5c542'; }
+    }
+    else if(n.ntype==='num'){
+      if(n.shared){ stroke='#38d4d4'; fill='rgba(56,212,212,0.12)'; textCol='#38d4d4'; strokeW=2.5;
+        glowSvg=`<ellipse cx="${cx}" cy="${cy}" rx="${rx+7}" ry="${ry+7}" fill="rgba(56,212,212,0.12)" stroke="none"/>`;
+      } else { stroke='#3dd68c'; fill='rgba(61,214,140,0.10)'; textCol='#3dd68c'; }
+    }
+    else if(n.ntype==='id'){
+      if(n.shared){ stroke='#38d4d4'; fill='rgba(56,212,212,0.12)'; textCol='#38d4d4'; strokeW=2.5;
+        glowSvg=`<ellipse cx="${cx}" cy="${cy}" rx="${rx+7}" ry="${ry+7}" fill="rgba(56,212,212,0.12)" stroke="none"/>`;
+      } else { stroke='#4f8ef7'; fill='rgba(79,142,247,0.10)'; textCol='#4f8ef7'; }
+    }
+
+    const lbl=n.label.length>9?n.label.substring(0,8)+'…':n.label;
+    return `${glowSvg}<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeW}"/>
+      <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="12" fill="${textCol}" font-weight="700">${escSVG(lbl)}</text>`;
+  }).join('');
+
+  return `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;display:block;margin:0 auto">
+    <defs>
+      <marker id="dagArrowNorm" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <polygon points="0 0, 8 4, 0 8" fill="#2e3648"/>
+      </marker>
+      <marker id="dagArrowShared" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <polygon points="0 0, 8 4, 0 8" fill="#38d4d4"/>
+      </marker>
+    </defs>
+    ${edgeSVG}
+    ${nodeSVG}
+  </svg>`;
+}
+
+window.addEventListener('load',()=>compile());
+</script>
+</body>
+</html>

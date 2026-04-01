@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MiniCompiler — Scalable Multi-Phase Pipeline</title>
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="logo-badge">&#9881;</div>
+  <div class="header-text">
+    <h1>Mini<span>Compiler</span></h1>
+    <p>Professional Multi-Line 6-Phase Compiler Architecture</p>
+  </div>
+</header>
+
+<div class="pipeline">
+  <div class="pipe-step"><div class="pipe-label" id="pl1">Lexical</div><div class="pipe-arrow"></div></div>
+  <div class="pipe-step"><div class="pipe-label" id="pl2">Syntax</div><div class="pipe-arrow"></div></div>
+  <div class="pipe-step"><div class="pipe-label" id="pl3">Semantic</div><div class="pipe-arrow"></div></div>
+  <div class="pipe-step"><div class="pipe-label" id="pl4">Inter.Code</div><div class="pipe-arrow"></div></div>
+  <div class="pipe-step"><div class="pipe-label" id="pl5">Optimize</div><div class="pipe-arrow"></div></div>
+  <div class="pipe-step"><div class="pipe-label" id="pl6">Target</div></div>
+</div>
+
+<div class="input-section">
+  <div class="input-label"><span class="dot"></span>Source Code</div>
+  <div class="input-row">
+    <textarea id="code-input" spellcheck="false" placeholder="Enter multi-line code, e.g.:&#10;int a = 5;&#10;int b = 4;&#10;a = (b + 2) * 3;">int a = 5;
+int b = 4;
+int c = 2;
+a = (b + c) * 2;</textarea>
+    <div class="btn-col">
+      <button class="compile-btn" onclick="compile()">&#9654; Compile</button>
+      <button class="clear-btn" onclick="clearAll()">&#x2715; Clear</button>
+    </div>
+  </div>
+  <div class="examples">
+    <span>Try:</span>
+    <button class="example-chip" onclick="setEx('ex1')">Decl + Expr</button>
+    <button class="example-chip" onclick="setEx('ex2')">All Constants</button>
+    <button class="example-chip" onclick="setEx('ex3')">Multi Assign</button>
+    <button class="example-chip" onclick="setEx('ex4')">Syntax Error</button>
+    <button class="example-chip" onclick="setEx('ex5')">Undeclared Var</button>
+    <button class="example-chip" onclick="setEx('ex6')" style="border-color:#fca5a5;color:#dc2626;background:#fef2f2;">Type Mismatch</button>
+    <button class="example-chip" onclick="setEx('ex7')" style="border-color:#fcd34d;color:#d97706;background:#fffbeb;">Precision Loss</button>
+  </div>
+  <!-- STRICT MODE TOGGLE -->
+  <div class="strict-toggle-wrap">
+    <label class="toggle-switch" title="Toggle strict compilation mode">
+      <input type="checkbox" id="strict-mode-cb" checked onchange="updateStrictBadge()">
+      <span class="toggle-slider"></span>
+    </label>
+    <span class="strict-label">Strict Mode</span>
+    <span class="strict-badge on" id="strict-mode-badge">ON</span>
+    <span class="strict-desc">— stops compilation after semantic errors (like a real compiler)</span>
+  </div>
+</div>
+
+<!-- TERMINATION BANNER -->
+<div class="termination-banner" id="termination-banner">
+  <div class="tb-icon">&#x1F6AB;</div>
+  <div class="tb-text">
+    <strong>Compilation Terminated</strong>
+    <span>Semantic errors prevent code generation. Fix all errors and recompile.</span>
+  </div>
+  <div class="tb-mode">STRICT MODE</div>
+</div>
+
+<!-- ERRORS PANEL -->
+<div class="errors-panel" id="errors-panel">
+  <div class="errors-panel-hdr">
+    <span class="errors-panel-title">&#9888;&nbsp; Compilation Errors</span>
+    <span class="err-badge" id="err-count">0</span>
+  </div>
+  <div id="errors-list"></div>
+</div>
+
+<!-- CONSTANT SCANNER -->
+<div class="const-scanner" id="const-scanner">
+  <div class="cs-hdr">
+    <div class="cs-icon">&#9889;</div>
+    <div><div class="cs-title">Constant Expression Scanner</div><div class="cs-sub">Pre-compilation pass &mdash; identifies compile-time constants before any phase runs</div></div>
+    <div class="cs-badge">Early Scan</div>
+  </div>
+  <div class="cs-body" id="cs-body"><div class="placeholder-msg">Awaiting input&hellip;</div></div>
+</div>
+
+<!-- PHASE CARDS -->
+<div class="phases-grid">
+  <div class="phase-card ph1" id="card1">
+    <div class="phase-header"><div class="phase-num">01</div><div><div class="phase-title">Lexical Analysis</div><div class="phase-subtitle">Tokenizer / Scanner</div></div><div class="phase-badge">LEXER</div></div>
+    <div class="phase-body" id="body1"><div class="placeholder-msg">Awaiting input&hellip;</div></div>
+  </div>
+  <div class="phase-card ph2" id="card2">
+    <div class="phase-header"><div class="phase-num">02</div><div><div class="phase-title">Syntax Analysis</div><div class="phase-subtitle">Parse Tree &middot; Per Statement</div></div><div class="phase-badge">PARSER</div></div>
+    <div class="phase-body" id="body2"><div class="placeholder-msg">Awaiting input&hellip;</div></div>
+  </div>
+  <div class="phase-card ph3" id="card3">
+    <div class="phase-header"><div class="phase-num">03</div><div><div class="phase-title">Semantic Analysis</div><div class="phase-subtitle">Symbol Table &amp; Type Checks</div></div><div class="phase-badge">SEMANTIC</div></div>
+    <div class="phase-body" id="body3"><div class="placeholder-msg">Awaiting input&hellip;</div></div>
+  </div>
+  <div class="phase-card ph4" id="card4">
+    <div class="phase-header"><div class="phase-num">04</div><div><div class="phase-title">Intermediate Code</div><div class="phase-subtitle">Three-Address Code (TAC)</div></div><div class="phase-badge">TAC</div></div>
+    <div class="phase-body" id="body4"><div class="placeholder-msg">Awaiting input&hellip;</div></div>
+  </div>
+  <div class="phase-card ph5" id="card5">
+    <div class="phase-header"><div class="phase-num">05</div><div><div class="phase-title">Optimization</div><div class="phase-subtitle">Constant Folding &middot; Copy Elim.</div></div><div class="phase-badge">OPT</div></div>
+    <div class="phase-body" id="body5"><div class="placeholder-msg">Awaiting input&hellip;</div></div>
+  </div>
+  <div class="phase-card ph6" id="card6">
+    <div class="phase-header"><div class="phase-num">06</div><div><div class="phase-title">Target Code</div><div class="phase-subtitle">Pseudo-Assembly Output</div></div><div class="phase-badge">ASM</div></div>
+    <div class="phase-body" id="body6"><div class="placeholder-msg">Awaiting input&hellip;</div></div>
+  </div>
+</div>
+
+<!-- FINAL TAC SUMMARY -->
+<div class="final-tac-wrap">
+  <div class="final-tac-card" id="final-tac-card">
+    <div class="ftac-hdr">
+      <div class="ftac-icon">&#9998;</div>
+      <div><div class="ftac-title">Final TAC Summary</div><div class="ftac-sub">Complete Three-Address Code for all statements &mdash; Raw vs Optimised side-by-side</div></div>
+      <div class="ftac-badge">TAC Summary</div>
+    </div>
+    <div class="final-tac-body" id="final-tac-body"><div class="placeholder-msg">Awaiting compilation&hellip;</div></div>
+  </div>
+</div>
+
+<!-- PARSE TREE VISUAL -->
+<div class="ptree-wrap">
+  <div class="ptree-card" id="ptree-card">
+    <div class="ptree-hdr">
+      <div class="ptree-icon">&#9903;</div>
+      <div><div class="ptree-title">Parse Tree Visualizer</div><div class="ptree-sub">Single unified parse tree for the entire program</div></div>
+      <div class="ptree-badge">Parse Tree</div>
+    </div>
+    <div class="ptree-body" id="ptree-body"><div class="placeholder-msg">Awaiting compilation&hellip;</div></div>
+  </div>
+</div>
+
+<!-- DAG VISUALIZER -->
+<div class="dag-wrap">
+  <div class="dag-card" id="dag-card">
+    <div class="dag-hdr">
+      <div class="dag-icon">&#9671;</div>
+      <div><div class="dag-title">DAG — Directed Acyclic Graph</div><div class="dag-sub">Optimized graph &mdash; shared subexpressions collapsed into single nodes</div></div>
+      <div class="dag-badge">DAG</div>
+    </div>
+    <div class="dag-body" id="dag-body"><div class="placeholder-msg">Awaiting compilation&hellip;</div></div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
