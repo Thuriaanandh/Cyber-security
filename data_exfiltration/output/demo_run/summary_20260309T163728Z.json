@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-03-09T16:37:28.289957+00:00",
+  "total_flows": 260,
+  "label_distribution": {
+    "Benign": 135,
+    "Possible Exfiltration": 90,
+    "Suspicious": 35
+  },
+  "entropy_stats": {
+    "mean": 6.1531051007836055,
+    "max": 7.98417881418163,
+    "min": 3.0058124768618018
+  },
+  "total_bytes_analysed": 914634272,
+  "unique_src_ips": 260,
+  "unique_dst_ips": 260
+}

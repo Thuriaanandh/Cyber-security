@@ -1,0 +1,34 @@
+2026-03-09 16:37:24 [INFO] __main__ â€” Running synthetic demo pipeline â€¦
+2026-03-09 16:37:24 [INFO] __main__ â€” Generating synthetic inference dataset â€¦
+2026-03-11 11:15:15 [INFO] __main__ — Running synthetic demo pipeline …
+2026-03-11 11:15:15 [INFO] __main__ — Generating synthetic inference dataset …
+2026-03-11 11:19:45 [INFO] __main__ — Running synthetic demo pipeline …
+2026-03-11 11:19:45 [INFO] __main__ — Generating synthetic inference dataset …
+2026-03-11 11:51:33 [INFO] __main__ — Stage 1: Parsing PCAP — bigFlows.pcap
+2026-03-11 11:54:26 [INFO] __main__ — Stage 2: Building flows from 791179 packets
+2026-03-11 11:58:01 [INFO] __main__ — Stage 3: Extracting features from 27966 flows
+2026-03-11 11:58:21 [INFO] __main__ — Stage 4: Applying heuristic rules
+2026-03-11 11:58:25 [INFO] __main__ — Stage 5: Running ML detection
+2026-03-11 11:58:26 [INFO] __main__ — Stage 6: Writing forensic artifacts to results/
+2026-03-11 11:58:33 [INFO] __main__ — Stage 7: Generating visualisation charts
+2026-03-11 12:02:11 [INFO] __main__ — Stage 1: Parsing PCAP -- bigFlows.pcap
+2026-03-11 12:07:03 [INFO] __main__ — Stage 2: Building flows from 791179 packets
+2026-03-11 12:11:30 [INFO] __main__ — Stage 3: Extracting features from 27966 flows
+2026-03-11 12:11:46 [INFO] __main__ — Stage 4: Applying heuristic rules
+2026-03-11 12:11:50 [INFO] __main__ — Stage 5: Running ML detection
+2026-03-11 12:11:51 [INFO] __main__ — Stage 6: Writing forensic artifacts to results_v2/
+2026-03-11 12:12:01 [INFO] __main__ —   csv                  -> results_v2/flows_20260311T064151Z.csv
+2026-03-11 12:12:01 [INFO] __main__ —   json                 -> results_v2/report_20260311T064152Z.json
+2026-03-11 12:12:01 [INFO] __main__ —   suspicious_log       -> results_v2/suspicious_flows_20260311T064158Z.txt
+2026-03-11 12:12:01 [INFO] __main__ —   summary              -> results_v2/summary_20260311T064201Z.json
+2026-03-11 12:12:02 [INFO] __main__ — Stage 7: Generating visualisation charts
+2026-03-28 11:15:15 [INFO] __main__ — Stage 1: Parsing PCAP -- bigFlows.pcap
+2026-03-28 11:17:51 [INFO] __main__ — Stage 2: Building flows from 791179 packets
+2026-03-28 11:21:10 [INFO] __main__ — Stage 3: Extracting features from 27966 flows
+2026-03-28 11:21:21 [INFO] __main__ — Stage 4: Applying heuristic rules
+2026-03-28 11:21:28 [INFO] __main__ — Stage 5: Running ML detection
+2026-03-28 11:21:29 [INFO] __main__ — Stage 6: Writing forensic artifacts to results/
+2026-03-28 11:21:36 [INFO] __main__ —   csv                  -> results/flows_20260328T055129Z.csv
+2026-03-28 11:21:36 [INFO] __main__ —   json                 -> results/report_20260328T055130Z.json
+2026-03-28 11:21:36 [INFO] __main__ —   suspicious_log       -> results/suspicious_flows_20260328T055134Z.txt
+2026-03-28 11:21:36 [INFO] __main__ —   summary              -> results/summary_20260328T055136Z.json
